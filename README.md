@@ -1,0 +1,69 @@
+# Northstar Ecosystem
+
+`Northstar Ecosystem` e o nome interno provisorio da empresa e da plataforma central.
+
+Este repositorio esta organizado para sustentar a execucao do ecossistema com continuidade entre sessoes. A estrutura foi montada por objetivos, para que o projeto avance com:
+
+- visao de empresa, nao so de app
+- sustentabilidade financeira desde o inicio
+- expansao global como requisito, nao como ideia futura
+- tres frentes separadas para o usuario
+- uma operacao central unica por tras
+
+## Nomes provisorios
+
+- Plataforma-mae: `Northstar Ecosystem`
+- Frente 1: `Echo` (`Music IA`)
+- Frente 2: `Pulse` (`Shorts IA`)
+- Frente 3: `Lumen` (`Watch IA`)
+
+Os nomes sao internos e podem ser trocados depois sem quebrar a organizacao.
+
+## Estrutura
+
+- [project-charter.md](C:/dev/northstar_ecosystem/docs/00-master/project-charter.md)
+- [governing-master-document.md](C:/dev/northstar_ecosystem/docs/00-master/governing-master-document.md)
+- [execution-readiness.md](C:/dev/northstar_ecosystem/docs/00-master/execution-readiness.md)
+- [system-development-plan.md](C:/dev/northstar_ecosystem/docs/00-master/system-development-plan.md)
+- [execution-tracker.md](C:/dev/northstar_ecosystem/docs/00-master/execution-tracker.md)
+- [project-handoff-status.md](C:/dev/northstar_ecosystem/docs/00-master/project-handoff-status.md)
+- [objectives-map.md](C:/dev/northstar_ecosystem/docs/01-objectives/objectives-map.md)
+- [ecosystem-architecture.md](C:/dev/northstar_ecosystem/docs/02-ecosystem/ecosystem-architecture.md)
+- [core-platform.md](C:/dev/northstar_ecosystem/docs/03-platform/core-platform.md)
+- [sustainability-model.md](C:/dev/northstar_ecosystem/docs/03-platform/sustainability-model.md)
+- [technical-architecture.md](C:/dev/northstar_ecosystem/docs/03-platform/technical-architecture.md)
+- [domain-model.md](C:/dev/northstar_ecosystem/docs/03-platform/domain-model.md)
+- [local-database-workflow.md](C:/dev/northstar_ecosystem/docs/03-platform/local-database-workflow.md)
+- [music-ia.md](C:/dev/northstar_ecosystem/docs/04-products/music-ia.md)
+- [echo-prd.md](C:/dev/northstar_ecosystem/docs/04-products/echo-prd.md)
+- [echo-mvp-backlog.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-backlog.md)
+- [echo-live-verification.md](C:/dev/northstar_ecosystem/docs/04-products/echo-live-verification.md)
+- [echo-seeded-verification-checklist.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seeded-verification-checklist.md)
+- [echo-mvp-gap-review.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-gap-review.md)
+- [echo-mvp-acceptance-review.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-acceptance-review.md)
+- [echo-controlled-beta-checklist.md](C:/dev/northstar_ecosystem/docs/04-products/echo-controlled-beta-checklist.md)
+- [shorts-ia.md](C:/dev/northstar_ecosystem/docs/04-products/shorts-ia.md)
+- [watch-ia.md](C:/dev/northstar_ecosystem/docs/04-products/watch-ia.md)
+- [operating-model.md](C:/dev/northstar_ecosystem/docs/05-operations/operating-model.md)
+- [executive-command-center.md](C:/dev/northstar_ecosystem/docs/05-operations/executive-command-center.md)
+- [command-center-mvp.md](C:/dev/northstar_ecosystem/docs/05-operations/command-center-mvp.md)
+- [admin-live-validation.md](C:/dev/northstar_ecosystem/docs/05-operations/admin-live-validation.md)
+- [readiness-roadmap.md](C:/dev/northstar_ecosystem/docs/06-roadmap/readiness-roadmap.md)
+- [full-phases-tasks-objectives.md](C:/dev/northstar_ecosystem/docs/06-roadmap/full-phases-tasks-objectives.md)
+- [phase-1-execution-plan.md](C:/dev/northstar_ecosystem/docs/06-roadmap/phase-1-execution-plan.md)
+- [post-launch-infinite-operations.md](C:/dev/northstar_ecosystem/docs/06-roadmap/post-launch-infinite-operations.md)
+- [phase-2-build-notes.md](C:/dev/northstar_ecosystem/workspace/planning/phase-2-build-notes.md)
+
+## Regra de direcao
+
+O usuario vera tres produtos.
+
+A empresa operara um unico sistema central.
+
+## Regra de prioridade
+
+1. Estruturar o core da empresa e da plataforma.
+2. Validar `Echo / Music IA`.
+3. Abrir `Pulse / Shorts IA`.
+4. Abrir `Lumen / Watch IA`.
+5. So depois acelerar monetizacao ampla e distribuicao de talentos.

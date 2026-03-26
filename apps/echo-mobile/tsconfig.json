@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [
+      "node",
+      "react",
+      "react-native"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "app/**/*",
+    "src/**/*"
+  ]
+}

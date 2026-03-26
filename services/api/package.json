@@ -1,0 +1,20 @@
+{
+  "name": "@northstar/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node dist/main.js",
+    "start:dev": "tsx watch src/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "echo lint api",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.17",
+    "@nestjs/core": "^11.0.17",
+    "@nestjs/platform-express": "^11.0.17",
+    "@prisma/client": "^6.5.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  }
+}

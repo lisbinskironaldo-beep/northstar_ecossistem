@@ -1,0 +1,43 @@
+{
+  "name": "northstar-ecosystem",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.9.0",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev:api",
+    "dev:api": "npm run start:dev --workspace @northstar/api",
+    "dev:command": "npm run dev --workspace @northstar/command-center-web",
+    "dev:admin": "npm run dev --workspace @northstar/admin-web",
+    "dev:echo": "npm run start --workspace @northstar/echo-mobile",
+    "build:api": "npm run build --workspace @northstar/api",
+    "db:generate": "prisma generate --schema infra/database/prisma/schema.prisma",
+    "db:format": "prisma format --schema infra/database/prisma/schema.prisma",
+    "db:validate": "powershell -ExecutionPolicy Bypass -File scripts/db/run-prisma-command.ps1 validate",
+    "db:push": "powershell -ExecutionPolicy Bypass -File scripts/db/run-prisma-command.ps1 push",
+    "db:local:up": "powershell -ExecutionPolicy Bypass -File scripts/db/start-local-postgres.ps1",
+    "db:local:down": "powershell -ExecutionPolicy Bypass -File scripts/db/stop-local-postgres.ps1",
+    "seed:echo:demo": "node scripts/seed/create-echo-demo.mjs",
+    "verify:echo:demo": "powershell -ExecutionPolicy Bypass -File scripts/verification/run-echo-demo-flow.ps1",
+    "verify:admin:live": "powershell -ExecutionPolicy Bypass -File scripts/verification/run-admin-live-check.ps1",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "browserslist": "^4.28.1",
+    "caniuse-lite": "^1.0.30001781",
+    "prisma": "^6.5.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

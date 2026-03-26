@@ -1,0 +1,211 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String           @id @db.Uuid
+  email             String?          @unique
+  accountStatus     String
+  country           String?
+  preferredLanguage String?
+  createdAt         DateTime         @db.Timestamptz(6)
+  lastActiveAt      DateTime?        @db.Timestamptz(6)
+  trustLevel        String
+  creatorProfiles   CreatorProfile[]
+  saves             Save[]
+  follows           Follow[]
+  playbackSessions  PlaybackSession[]
+  reports           Report[]         @relation("ReportUser")
+  trustScores       TrustScore[]
+}
+
+model CreatorProfile {
+  id                          String        @id @db.Uuid
+  userId                      String        @db.Uuid
+  displayName                 String
+  handle                      String        @unique
+  bio                         String?
+  creatorStatus               String
+  creatorTier                 String
+  primaryFront                String
+  followerCountCached         Int           @default(0)
+  publishedContentCountCached Int           @default(0)
+  createdAt                   DateTime      @db.Timestamptz(6)
+  user                        User          @relation(fields: [userId], references: [id])
+  contentItems                ContentItem[]
+  reports                     Report[]      @relation("ReportCreator")
+  trustScores                 TrustScore[]
+  followers                   Follow[]
+}
+
+model Category {
+  id             String        @id @db.Uuid
+  productSurface String
+  slug           String        @unique
+  displayName    String
+  activeFlag     Boolean       @default(true)
+  rankOrder      Int           @default(0)
+  contentItems   ContentItem[]
+}
+
+model ContentItem {
+  id                String           @id @db.Uuid
+  creatorId         String           @db.Uuid
+  productSurface    String
+  contentType       String
+  contentState      String
+  visibilityState   String
+  trustState        String
+  title             String
+  description       String?
+  primaryCategoryId String?          @db.Uuid
+  createdAt         DateTime         @db.Timestamptz(6)
+  publishedAt       DateTime?        @db.Timestamptz(6)
+  archivedAt        DateTime?        @db.Timestamptz(6)
+  creator           CreatorProfile   @relation(fields: [creatorId], references: [id])
+  primaryCategory   Category?        @relation(fields: [primaryCategoryId], references: [id])
+  assets            ContentAsset[]
+  track             Track?
+  saves             Save[]
+  playbackSessions  PlaybackSession[]
+  reports           Report[]         @relation("ReportContent")
+  events            EventLog[]
+}
+
+model ContentAsset {
+  id              String      @id @db.Uuid
+  contentId       String      @db.Uuid
+  assetRole       String
+  storageProvider String
+  storageKey      String
+  mimeType        String
+  durationMs      Int?
+  fileSizeBytes   BigInt?
+  checksum        String?
+  transcodedState String
+  createdAt       DateTime    @db.Timestamptz(6)
+  content         ContentItem @relation(fields: [contentId], references: [id])
+}
+
+model Track {
+  id                String      @id @db.Uuid
+  contentId         String      @unique @db.Uuid
+  artistNameDisplay String
+  explicitFlag      Boolean     @default(false)
+  releaseType       String?
+  aiDeclaration     Boolean
+  sourceToolOptional String?
+  content           ContentItem @relation(fields: [contentId], references: [id])
+}
+
+model Save {
+  id        String      @id @db.Uuid
+  userId    String      @db.Uuid
+  contentId String      @db.Uuid
+  createdAt DateTime    @db.Timestamptz(6)
+  user      User        @relation(fields: [userId], references: [id])
+  content   ContentItem @relation(fields: [contentId], references: [id])
+}
+
+model Follow {
+  id        String         @id @db.Uuid
+  userId    String         @db.Uuid
+  creatorId String         @db.Uuid
+  createdAt DateTime       @db.Timestamptz(6)
+  user      User           @relation(fields: [userId], references: [id])
+  creator   CreatorProfile @relation(fields: [creatorId], references: [id])
+}
+
+model PlaybackSession {
+  id                  String      @id @db.Uuid
+  userId              String?     @db.Uuid
+  contentId           String      @db.Uuid
+  productSurface      String
+  startedAt           DateTime    @db.Timestamptz(6)
+  endedAt             DateTime?   @db.Timestamptz(6)
+  listenedMs          Int         @default(0)
+  completionRatio     Decimal     @default(0) @db.Decimal(5, 4)
+  replayCountInSession Int        @default(0)
+  sourceContext       String?
+  user                User?       @relation(fields: [userId], references: [id])
+  content             ContentItem @relation(fields: [contentId], references: [id])
+}
+
+model Report {
+  id             String          @id @db.Uuid
+  reporterUserId String?         @db.Uuid
+  contentId      String?         @db.Uuid
+  creatorId      String?         @db.Uuid
+  reportReason   String
+  reportSource   String
+  reportStatus   String
+  createdAt      DateTime        @db.Timestamptz(6)
+  resolvedAt     DateTime?       @db.Timestamptz(6)
+  reporter       User?           @relation("ReportUser", fields: [reporterUserId], references: [id])
+  content        ContentItem?    @relation("ReportContent", fields: [contentId], references: [id])
+  creator        CreatorProfile? @relation("ReportCreator", fields: [creatorId], references: [id])
+  moderationActions ModerationAction[]
+}
+
+model TrustScore {
+  id         String          @id @db.Uuid
+  userId     String          @db.Uuid
+  creatorId  String?         @db.Uuid
+  scoreValue Int
+  scoreBand  String
+  updatedAt  DateTime        @db.Timestamptz(6)
+  user       User            @relation(fields: [userId], references: [id])
+  creator    CreatorProfile? @relation(fields: [creatorId], references: [id])
+}
+
+model Alert {
+  id              String    @id @db.Uuid
+  alertType       String
+  severity        String
+  productSurface  String?
+  targetReference String?
+  triggeredAt     DateTime  @db.Timestamptz(6)
+  resolvedAt      DateTime? @db.Timestamptz(6)
+  detailsJson     Json?
+}
+
+model ModerationAction {
+  id           String    @id @db.Uuid
+  reportId     String?   @db.Uuid
+  targetType   String
+  targetId     String
+  actionType   String
+  actionReason String
+  createdAt    DateTime  @db.Timestamptz(6)
+  createdBy    String?
+  expiresAt    DateTime? @db.Timestamptz(6)
+  report       Report?   @relation(fields: [reportId], references: [id])
+}
+
+model EventLog {
+  id             String       @id @db.Uuid
+  eventName      String
+  actorUserId    String?      @db.Uuid
+  actorCreatorId String?      @db.Uuid
+  contentId      String?      @db.Uuid
+  productSurface String
+  occurredAtUtc  DateTime     @db.Timestamptz(6)
+  payloadJson    Json?
+  content        ContentItem? @relation(fields: [contentId], references: [id])
+}
+
+model ChangeLedger {
+  id             String    @id @db.Uuid
+  changeType     String
+  targetScope    String
+  approvedBy     String?
+  createdAt      DateTime  @db.Timestamptz(6)
+  summary        String
+  expectedEffect String?
+  observedEffect String?
+}
