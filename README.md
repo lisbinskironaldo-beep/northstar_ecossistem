@@ -42,12 +42,25 @@ Os nomes sao internos e podem ser trocados depois sem quebrar a organizacao.
 - [echo-mvp-gap-review.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-gap-review.md)
 - [echo-mvp-acceptance-review.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-acceptance-review.md)
 - [echo-controlled-beta-checklist.md](C:/dev/northstar_ecosystem/docs/04-products/echo-controlled-beta-checklist.md)
+- [echo-beta-ops-kickoff.md](C:/dev/northstar_ecosystem/docs/04-products/echo-beta-ops-kickoff.md)
+- [echo-seed-catalog-plan.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seed-catalog-plan.md)
+- [echo-seed-catalog-review-sheet.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seed-catalog-review-sheet.md)
+- [echo-seed-batch-01.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seed-batch-01.md)
+- [echo-creator-onboarding-playbook.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-onboarding-playbook.md)
+- [echo-creator-sourcing-map.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-sourcing-map.md)
+- [echo-creator-outreach-templates.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-outreach-templates.md)
+- [echo-creator-cohort-tracker.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-cohort-tracker.md)
+- [echo-external-cohort-wave-01.md](C:/dev/northstar_ecosystem/docs/04-products/echo-external-cohort-wave-01.md)
+- [echo-external-shortlist-2026-03-27.md](C:/dev/northstar_ecosystem/docs/04-products/echo-external-shortlist-2026-03-27.md)
 - [shorts-ia.md](C:/dev/northstar_ecosystem/docs/04-products/shorts-ia.md)
 - [watch-ia.md](C:/dev/northstar_ecosystem/docs/04-products/watch-ia.md)
 - [operating-model.md](C:/dev/northstar_ecosystem/docs/05-operations/operating-model.md)
 - [executive-command-center.md](C:/dev/northstar_ecosystem/docs/05-operations/executive-command-center.md)
 - [command-center-mvp.md](C:/dev/northstar_ecosystem/docs/05-operations/command-center-mvp.md)
 - [admin-live-validation.md](C:/dev/northstar_ecosystem/docs/05-operations/admin-live-validation.md)
+- [echo-beta-operator-runbook.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-operator-runbook.md)
+- [echo-beta-daily-review-template.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-daily-review-template.md)
+- [echo-beta-issue-log-template.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-issue-log-template.md)
 - [readiness-roadmap.md](C:/dev/northstar_ecosystem/docs/06-roadmap/readiness-roadmap.md)
 - [full-phases-tasks-objectives.md](C:/dev/northstar_ecosystem/docs/06-roadmap/full-phases-tasks-objectives.md)
 - [phase-1-execution-plan.md](C:/dev/northstar_ecosystem/docs/06-roadmap/phase-1-execution-plan.md)
@@ -67,3 +80,20 @@ A empresa operara um unico sistema central.
 3. Abrir `Pulse / Shorts IA`.
 4. Abrir `Lumen / Watch IA`.
 5. So depois acelerar monetizacao ampla e distribuicao de talentos.
+
+## Preview local atual
+
+- Preview web estavel do Echo: `cmd /c npm run dev:echo` (`http://127.0.0.1:3010`)
+- Admin web: `cmd /c npm run dev:admin`
+- Command Center web: `cmd /c npm run dev:command`
+- API: `cmd /c npm run dev:api` (`http://127.0.0.1:3001`)
+- API watch mode secundario: `cmd /c npm run dev:api:watch`
+- Echo mobile shell continua no projeto para evolucao futura: `cmd /c npm run dev:echo:mobile`
+
+Observacao:
+
+- o preview oficial de navegador do Echo agora e `apps/echo-web`
+- o `apps/echo-mobile` continua como superficie mobile, mas o preview web via Expo foi considerado instavel neste ambiente
+- no desenvolvimento local, o `Echo web` usa `apps/echo-web/.env.local` para os IDs demo
+- o backend `dev:api` agora roda em modo compilado com watch, porque `tsx watch` se mostrou instavel para DI do Nest neste Windows
+

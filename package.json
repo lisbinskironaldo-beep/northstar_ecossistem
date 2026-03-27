@@ -10,11 +10,14 @@
   ],
   "scripts": {
     "dev": "npm run dev:api",
-    "dev:api": "npm run start:dev --workspace @northstar/api",
+    "dev:api": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/dev/start-api.ps1",
+    "dev:api:watch": "npm run dev --workspace @northstar/api",
     "dev:command": "npm run dev --workspace @northstar/command-center-web",
     "dev:admin": "npm run dev --workspace @northstar/admin-web",
-    "dev:echo": "npm run start --workspace @northstar/echo-mobile",
+    "dev:echo": "npm run dev --workspace @northstar/echo-web",
+    "dev:echo:mobile": "npm run start --workspace @northstar/echo-mobile",
     "build:api": "npm run build --workspace @northstar/api",
+    "build:echo": "npm run build --workspace @northstar/echo-web",
     "db:generate": "prisma generate --schema infra/database/prisma/schema.prisma",
     "db:format": "prisma format --schema infra/database/prisma/schema.prisma",
     "db:validate": "powershell -ExecutionPolicy Bypass -File scripts/db/run-prisma-command.ps1 validate",
@@ -22,6 +25,7 @@
     "db:local:up": "powershell -ExecutionPolicy Bypass -File scripts/db/start-local-postgres.ps1",
     "db:local:down": "powershell -ExecutionPolicy Bypass -File scripts/db/stop-local-postgres.ps1",
     "seed:echo:demo": "node scripts/seed/create-echo-demo.mjs",
+    "seed:echo:batch-01": "node scripts/seed/create-echo-batch.mjs scripts/seed/manifests/echo-batch-01.json",
     "verify:echo:demo": "powershell -ExecutionPolicy Bypass -File scripts/verification/run-echo-demo-flow.ps1",
     "verify:admin:live": "powershell -ExecutionPolicy Bypass -File scripts/verification/run-admin-live-check.ps1",
     "lint": "npm run lint --workspaces --if-present",
@@ -37,6 +41,7 @@
     "browserslist": "^4.28.1",
     "caniuse-lite": "^1.0.30001781",
     "prisma": "^6.5.0",
+    "tsc-watch": "^7.2.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }

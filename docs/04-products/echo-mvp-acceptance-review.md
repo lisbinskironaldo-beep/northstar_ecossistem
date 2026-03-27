@@ -13,7 +13,7 @@ It exists so the project can decide from files, not chat memory, whether `Echo a
 ## Acceptance Status
 
 - current decision: `accepted for MVP build`
-- reason: `the product loop, admin loop and mobile shell bootstrap are now strong enough to mark Echo as built at MVP level`
+- reason: `the product loop, admin loop and stable browser preview are now strong enough to mark Echo as built at MVP level`
 
 ## What Passed
 
@@ -51,6 +51,7 @@ It exists so the project can decide from files, not chat memory, whether `Echo a
 - creator setup exists
 - category browse exists
 - creator profile surface exists
+- stable browser preview now exists as `apps/echo-web`
 
 ## What Was Improved During This Review
 
@@ -66,13 +67,14 @@ It exists so the project can decide from files, not chat memory, whether `Echo a
 
 Current state:
 
-- the Echo web shell now boots and bundles locally
+- the Echo web preview now runs through a dedicated Next.js app
 - the core loop is proven through API, admin and shell integration
 - no browser automation or device interaction suite exists yet
 
 Why this does not block MVP build:
 
 - the blocking bootstrap/runtime issue has been resolved
+- the browser validation path is now stable in this environment
 - the remaining gap is testing depth, not missing product capability
 
 ## Acceptance Decision
@@ -89,3 +91,5 @@ It should move into the next stage as a controlled beta candidate, not as a poli
 2. seed the launch catalog more deeply
 3. onboard the first creators
 4. start the first controlled Echo beta
+
+

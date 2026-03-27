@@ -30,6 +30,8 @@ That means Echo has crossed from `concept shell` into `MVP built candidate` and 
 
 Echo is ready to be marked as `Echo app MVP built`.
 
+The stable browser preview for that MVP now lives in `apps/echo-web`.
+
 ## What Is Already Sufficient
 
 ### Product surface
@@ -159,3 +161,5 @@ All of the following must be true:
 Do not check `Echo app MVP built` because the codebase feels advanced.
 
 Check it only when the product loop is proven and the remaining gaps are no longer product-blocking.
+
+

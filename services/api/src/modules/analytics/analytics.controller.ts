@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { AnalyticsService, TrackEventInput } from './analytics.service';
 
 @Controller('analytics')
 export class AnalyticsController {
-  constructor(private readonly analyticsService: AnalyticsService) {}
+  constructor(@Inject(AnalyticsService) private readonly analyticsService: AnalyticsService) {}
 
   @Post('events')
   trackEvent(@Body() body: TrackEventInput) {

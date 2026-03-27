@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { randomUUID } from 'node:crypto';
 import { AnalyticsService } from '../analytics/analytics.service';
@@ -12,8 +12,8 @@ export interface RegisterUserInput {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly analyticsService: AnalyticsService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(AnalyticsService) private readonly analyticsService: AnalyticsService,
   ) {}
 
   async register(input: RegisterUserInput) {

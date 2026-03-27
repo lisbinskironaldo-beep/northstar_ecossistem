@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Query } from '@nestjs/common';
 import {
   ContentService,
   CreateSaveInput,
@@ -11,7 +11,7 @@ import {
 
 @Controller('content')
 export class ContentController {
-  constructor(private readonly contentService: ContentService) {}
+  constructor(@Inject(ContentService) private readonly contentService: ContentService) {}
 
   @Get('categories')
   listCategories(@Query() query: ListCategoriesInput) {

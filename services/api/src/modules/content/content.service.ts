@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AnalyticsService } from '../analytics/analytics.service';
@@ -43,8 +43,8 @@ export interface ListSavedTracksInput {
 @Injectable()
 export class ContentService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly analyticsService: AnalyticsService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(AnalyticsService) private readonly analyticsService: AnalyticsService,
   ) {}
 
   listCategories(input: ListCategoriesInput) {

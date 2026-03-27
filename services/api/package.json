@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "start": "node dist/main.js",
-    "start:dev": "tsx watch src/main.ts",
+    "dev": "tsc-watch --project tsconfig.build.json --onSuccess \"node dist/main.js\"",
+    "dev:watch": "npm run dev",
+    "start:dev": "npm run dev",
     "build": "tsc -p tsconfig.build.json",
     "lint": "echo lint api",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "@nestjs/common": "^11.0.17",
     "@nestjs/core": "^11.0.17",
     "@nestjs/platform-express": "^11.0.17",

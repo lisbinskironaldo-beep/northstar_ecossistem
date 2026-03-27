@@ -107,10 +107,30 @@ Read this file first when resuming the project.
 - Echo listener-side report action implemented in the mobile shell
 - Echo live verification rerun successfully after the player/report app changes
 - Echo creator setup path implemented in the upload flow and smoke-tested via live API
-- Echo mobile web shell bootstrapped successfully after the Expo Router entry fix
 - Echo MVP acceptance review documented and accepted for MVP build
 - Echo app MVP marked as built
+- Echo web preview rebuilt as a dedicated Next.js app for stable browser access
+- Echo web build verified and local server responded on port 3010
+- Echo web demo environment configured through app-local env and verified without demo/API warnings
+- Echo web product-facing UI pass 1 completed
+- Echo web product-facing UI pass 2 completed
+- Echo web product-facing UI pass 3 completed
+- Echo beta ops kickoff document created
+- Echo seed catalog plan created
+- Echo seed catalog review sheet created
+- Echo creator onboarding playbook created
+- Echo creator cohort tracker created
+- Echo beta operator runbook created
+- Echo beta daily review template created
+- Echo beta issue log template created
 - execution tracker updated for Phase 2
+- API development runtime moved away from `tsx watch` because Nest DI was unstable in that mode on this Windows setup
+- live Echo seed catalog baseline documented from the local database
+- live Echo creator cohort baseline documented from the local database
+- Echo live verification rerun successfully against the stable compiled-watch API runtime
+- Echo batch 01 manifest created and applied successfully to the local PostgreSQL environment
+- Echo external cohort wave 01 documented with sourcing map and outreach templates
+- first public external creator shortlist documented for Wave 01
 
 ## What Is Next
 
@@ -131,6 +151,25 @@ This is not blocking builds right now.
 ## Functional Testing Note
 
 The auth, creator, content, analytics and trust endpoints compile and build successfully, and the local PostgreSQL workflow is now proven with a live database.
+
+The compiled API runtime is stable and responds correctly on live data. The older `tsx watch` development mode should not be treated as the reliable source of truth for backend runtime behavior in this environment.
+
+The local Echo environment now includes the first real internal beta seed layer:
+
+- 10 users
+- 10 creators
+- 27 Echo tracks
+- 17 visible opening tracks
+- 10 suppressed reserve tracks
+
+The first external creator wave is now also structured in files, including:
+
+- target slots
+- sourcing lanes
+- outreach templates
+- tracker placeholders ready to be replaced with real names
+
+That work has now progressed into a first real public shortlist with named candidates and source links.
 
 A first live end-to-end Echo flow has already been executed successfully against local PostgreSQL, including:
 
@@ -170,3 +209,15 @@ If you complete or materially change anything:
 ## Handoff Note
 
 The project is intentionally being documented so continuity lives in files, not chat memory.
+
+## Echo Preview Note
+
+The stable browser preview for Echo is now `apps/echo-web`, built with Next.js.
+
+`apps/echo-mobile` remains part of the codebase for future mobile evolution, but its Expo web preview proved unreliable in this Windows environment and should not be treated as the primary browser validation surface.
+
+For local development, the browser surface reads demo IDs from `apps/echo-web/.env.local`.
+
+
+
+

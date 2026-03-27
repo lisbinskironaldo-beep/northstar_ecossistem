@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AnalyticsService } from '../analytics/analytics.service';
@@ -23,8 +23,8 @@ export interface ListFollowedCreatorsInput {
 @Injectable()
 export class CreatorsService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly analyticsService: AnalyticsService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(AnalyticsService) private readonly analyticsService: AnalyticsService,
   ) {}
 
   async createProfile(input: CreateCreatorProfileInput) {

@@ -67,6 +67,16 @@ It must be updated after every meaningful planning or implementation session.
 - [x] Echo creator setup path built
 - [x] Echo MVP acceptance review documented
 - [x] Echo app MVP built
+- [x] stable Echo web preview built in Next.js
+- [x] Echo preview runtime moved from Expo web to Echo web app
+- [x] Echo web demo environment configured and verified without startup warnings
+- [x] API development runtime stabilized away from `tsx watch`
+- [x] live Echo seed review baseline documented from local database
+- [x] live Echo creator cohort baseline documented from local database
+- [x] stable API runtime validated again with live Echo verification flow
+- [x] first real Echo seed batch prepared and applied locally
+- [x] first external Echo cohort wave documented
+- [x] first public external creator shortlist documented
 
 ### Phase 3: Echo Launch
 
@@ -191,9 +201,32 @@ It must be updated after every meaningful planning or implementation session.
 - Echo live verification rerun successfully after the player/report changes
 - Echo creator setup path added to the upload flow and smoke-tested via live API
 - Echo MVP acceptance review completed and accepted for MVP build
-- Echo mobile web shell bootstrapped successfully after Expo Router entry fix
+- Echo web preview rebuilt as a dedicated Next.js app for stable browser access
+- Echo web demo environment configured through app-local env and verified without demo/API warnings
+- Echo web product-facing UI pass 1 completed
+- Echo web product-facing UI pass 2 completed
+- Echo web product-facing UI pass 3 completed
+- Echo beta ops kickoff document created
+- Echo seed catalog plan created
+- Echo seed catalog review sheet created
+- Echo creator onboarding playbook created
+- Echo creator cohort tracker created
+- Echo beta operator runbook created
+- Echo beta daily review template created
+- Echo beta issue log template created
 - Echo app MVP marked as built
+- API development runtime verified in compiled-watch mode
+- live Echo seed baseline recorded from local database
+- live Echo creator cohort baseline recorded from local database
+- Echo live verification rerun successfully against the stable compiled-watch API runtime
+- Echo batch 01 manifest created and seeded locally
+- Echo local database now carries the first real internal beta catalog layer
+- Echo external cohort wave 01 documented with sourcing and outreach material
+- first public creator shortlist recorded for Wave 01 outreach
 
 ## Next Recommended Session Goal
 
-Use the gap review as the build gate: finish creator setup, rerun the seeded acceptance checklist, and only then decide whether `Echo app MVP built` can be checked.
+Run manual verification on the public shortlist, send the first outreach wave, and move the first real creators from `candidate` to `invited`.
+
+
+

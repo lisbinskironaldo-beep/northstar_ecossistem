@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -45,8 +45,8 @@ export interface CreateModerationActionInput {
 @Injectable()
 export class TrustService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly analyticsService: AnalyticsService,
+    @Inject(PrismaService) private readonly prisma: PrismaService,
+    @Inject(AnalyticsService) private readonly analyticsService: AnalyticsService,
   ) {}
 
   private get db(): PrismaClient {

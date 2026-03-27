@@ -1,0 +1,274 @@
+{
+  "batchId": "echo-batch-01",
+  "surface": "echo",
+  "defaultCountry": "BR",
+  "defaultLanguage": "pt-BR",
+  "categories": [
+    { "slug": "lo-fi", "displayName": "Lo-fi", "rankOrder": 10 },
+    { "slug": "trap", "displayName": "Trap", "rankOrder": 20 },
+    { "slug": "electronic", "displayName": "Electronic", "rankOrder": 30 },
+    { "slug": "ambient", "displayName": "Ambient", "rankOrder": 40 },
+    { "slug": "dark", "displayName": "Dark", "rankOrder": 50 },
+    { "slug": "pop-ia", "displayName": "Pop IA", "rankOrder": 60 },
+    { "slug": "instrumental", "displayName": "Instrumental", "rankOrder": 70 },
+    { "slug": "experimental", "displayName": "Experimental", "rankOrder": 80 }
+  ],
+  "creators": [
+    {
+      "email": "aurora.circuit@northstar.local",
+      "displayName": "Aurora Circuit",
+      "handle": "aurora-circuit",
+      "bio": "Melodic electronic sketches built for late-night discovery.",
+      "tracks": [
+        {
+          "title": "Afterimage Avenue",
+          "description": "Bright melodic opener for the first-session feed.",
+          "artistNameDisplay": "Aurora Circuit",
+          "categorySlug": "electronic",
+          "catalogStatus": "opening",
+          "feedRank": 1
+        },
+        {
+          "title": "Glass Horizon",
+          "description": "A cleaner, slower electronic cut with a broad hook.",
+          "artistNameDisplay": "Aurora Circuit",
+          "categorySlug": "ambient",
+          "catalogStatus": "opening",
+          "feedRank": 9
+        },
+        {
+          "title": "Static Bloom",
+          "description": "More niche melodic texture for later exploration.",
+          "artistNameDisplay": "Aurora Circuit",
+          "categorySlug": "experimental",
+          "catalogStatus": "reserve",
+          "feedRank": 22
+        }
+      ]
+    },
+    {
+      "email": "nox.avenue@northstar.local",
+      "displayName": "Nox Avenue",
+      "handle": "nox-avenue",
+      "bio": "Dark city tracks for night-feed depth and mood.",
+      "tracks": [
+        {
+          "title": "Midnight Toll",
+          "description": "Dark pulse track meant to anchor the night lane.",
+          "artistNameDisplay": "Nox Avenue",
+          "categorySlug": "dark",
+          "catalogStatus": "opening",
+          "feedRank": 2
+        },
+        {
+          "title": "Velvet Exit",
+          "description": "Softer dark track with more replay potential.",
+          "artistNameDisplay": "Nox Avenue",
+          "categorySlug": "dark",
+          "catalogStatus": "opening",
+          "feedRank": 11
+        },
+        {
+          "title": "Signal Under Rain",
+          "description": "Mood-heavy reserve piece for later refreshes.",
+          "artistNameDisplay": "Nox Avenue",
+          "categorySlug": "ambient",
+          "catalogStatus": "reserve",
+          "feedRank": 21
+        }
+      ]
+    },
+    {
+      "email": "brisa.loop@northstar.local",
+      "displayName": "Brisa Loop",
+      "handle": "brisa-loop",
+      "bio": "Lo-fi and chill sketches designed for saves and repeat listens.",
+      "tracks": [
+        {
+          "title": "Warm Tape Weather",
+          "description": "Soft lo-fi entry with friendly first-session energy.",
+          "artistNameDisplay": "Brisa Loop",
+          "categorySlug": "lo-fi",
+          "catalogStatus": "opening",
+          "feedRank": 3
+        },
+        {
+          "title": "Blue Desk Lamp",
+          "description": "Study-friendly loop for the habitual listener lane.",
+          "artistNameDisplay": "Brisa Loop",
+          "categorySlug": "lo-fi",
+          "catalogStatus": "opening",
+          "feedRank": 13
+        },
+        {
+          "title": "Cloud Notes 5AM",
+          "description": "Reserve chill cut to widen the feed later.",
+          "artistNameDisplay": "Brisa Loop",
+          "categorySlug": "ambient",
+          "catalogStatus": "reserve",
+          "feedRank": 23
+        }
+      ]
+    },
+    {
+      "email": "ferro.pulse@northstar.local",
+      "displayName": "Ferro Pulse",
+      "handle": "ferro-pulse",
+      "bio": "Sharper rhythmic AI cuts for energy and contrast.",
+      "tracks": [
+        {
+          "title": "Chrome Rush",
+          "description": "Fast-energy track to break softer feed clusters.",
+          "artistNameDisplay": "Ferro Pulse",
+          "categorySlug": "trap",
+          "catalogStatus": "opening",
+          "feedRank": 4
+        },
+        {
+          "title": "Heat Grid",
+          "description": "Percussive mid-feed cut with stronger edge.",
+          "artistNameDisplay": "Ferro Pulse",
+          "categorySlug": "electronic",
+          "catalogStatus": "opening",
+          "feedRank": 12
+        },
+        {
+          "title": "Titan Echo",
+          "description": "Reserve harder cut used if energy feels too low.",
+          "artistNameDisplay": "Ferro Pulse",
+          "categorySlug": "trap",
+          "catalogStatus": "reserve",
+          "feedRank": 24
+        }
+      ]
+    },
+    {
+      "email": "vale.mono@northstar.local",
+      "displayName": "Vale Mono",
+      "handle": "vale-mono",
+      "bio": "Instrumental and ambient pieces for calmer discovery.",
+      "tracks": [
+        {
+          "title": "Paper Skyline",
+          "description": "Instrumental piece that broadens taste range early.",
+          "artistNameDisplay": "Vale Mono",
+          "categorySlug": "instrumental",
+          "catalogStatus": "opening",
+          "feedRank": 5
+        },
+        {
+          "title": "Drift Geometry",
+          "description": "Ambient-instrumental follow-up with gentler pacing.",
+          "artistNameDisplay": "Vale Mono",
+          "categorySlug": "ambient",
+          "catalogStatus": "opening",
+          "feedRank": 15
+        },
+        {
+          "title": "Soft Relay",
+          "description": "Reserve track for lower-intensity catalog refresh.",
+          "artistNameDisplay": "Vale Mono",
+          "categorySlug": "instrumental",
+          "catalogStatus": "reserve",
+          "feedRank": 20
+        }
+      ]
+    },
+    {
+      "email": "prisma.motel@northstar.local",
+      "displayName": "Prisma Motel",
+      "handle": "prisma-motel",
+      "bio": "Pop-adjacent AI identity for accessible discovery moments.",
+      "tracks": [
+        {
+          "title": "Neon Check-In",
+          "description": "Accessible pop-electronic track for broader appeal.",
+          "artistNameDisplay": "Prisma Motel",
+          "categorySlug": "pop-ia",
+          "catalogStatus": "opening",
+          "feedRank": 6
+        },
+        {
+          "title": "Late Lobby Lights",
+          "description": "Second pop-adjacent cut meant to test save intent.",
+          "artistNameDisplay": "Prisma Motel",
+          "categorySlug": "electronic",
+          "catalogStatus": "opening",
+          "feedRank": 10
+        },
+        {
+          "title": "Checkout Mirage",
+          "description": "Reserve track if the opening set needs more polish.",
+          "artistNameDisplay": "Prisma Motel",
+          "categorySlug": "pop-ia",
+          "catalogStatus": "reserve",
+          "feedRank": 19
+        }
+      ]
+    },
+    {
+      "email": "sombra.atlas@northstar.local",
+      "displayName": "Sombra Atlas",
+      "handle": "sombra-atlas",
+      "bio": "Cinematic darker world-building for prestige signaling.",
+      "tracks": [
+        {
+          "title": "Black Map Cinema",
+          "description": "Cinematic-dark cut to hint at future premium depth.",
+          "artistNameDisplay": "Sombra Atlas",
+          "categorySlug": "dark",
+          "catalogStatus": "opening",
+          "feedRank": 7
+        },
+        {
+          "title": "Ash Elevator",
+          "description": "Weirder dark support track for non-generic contrast.",
+          "artistNameDisplay": "Sombra Atlas",
+          "categorySlug": "experimental",
+          "catalogStatus": "opening",
+          "feedRank": 16
+        },
+        {
+          "title": "Terminal Lantern",
+          "description": "Reserve cinematic piece for later feed refreshes.",
+          "artistNameDisplay": "Sombra Atlas",
+          "categorySlug": "experimental",
+          "catalogStatus": "reserve",
+          "feedRank": 18
+        }
+      ]
+    },
+    {
+      "email": "lume.delta@northstar.local",
+      "displayName": "Lume Delta",
+      "handle": "lume-delta",
+      "bio": "Experimental but listenable shapes for the edge of the feed.",
+      "tracks": [
+        {
+          "title": "Soft Crash Flora",
+          "description": "Experimental opener that still feels digestible.",
+          "artistNameDisplay": "Lume Delta",
+          "categorySlug": "experimental",
+          "catalogStatus": "opening",
+          "feedRank": 8
+        },
+        {
+          "title": "Hollow Chorus",
+          "description": "Lightly strange support track for later feed texture.",
+          "artistNameDisplay": "Lume Delta",
+          "categorySlug": "ambient",
+          "catalogStatus": "opening",
+          "feedRank": 14
+        },
+        {
+          "title": "Prism Static Bloom",
+          "description": "Reserve edge case for experimentation refreshes.",
+          "artistNameDisplay": "Lume Delta",
+          "categorySlug": "experimental",
+          "catalogStatus": "reserve",
+          "feedRank": 17
+        }
+      ]
+    }
+  ]
+}

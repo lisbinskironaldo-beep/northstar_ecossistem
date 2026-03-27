@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import {
   CreateFollowInput,
   CreateCreatorProfileInput,
@@ -8,7 +8,7 @@ import {
 
 @Controller('creators')
 export class CreatorsController {
-  constructor(private readonly creatorsService: CreatorsService) {}
+  constructor(@Inject(CreatorsService) private readonly creatorsService: CreatorsService) {}
 
   @Post()
   createProfile(@Body() body: CreateCreatorProfileInput) {

@@ -43,7 +43,7 @@ Validate:
 - [x] report queue visible in admin
 - [x] moderation actions visible in admin
 - [x] report-to-moderation path tested
-- [ ] duplicate and spam rules documented for beta operators
+- [x] duplicate and spam rules documented for beta operators
 
 ### Data
 
@@ -54,10 +54,10 @@ Validate:
 
 ### Ops
 
-- [ ] founder or operator knows the review clock
-- [ ] daily review rhythm is scheduled
-- [ ] issue logging path is defined
-- [ ] rollback rule is defined
+- [x] founder or operator knows the review clock
+- [x] daily review rhythm is scheduled
+- [x] issue logging path is defined
+- [x] rollback rule is defined
 
 ## Beta Operating Rhythm
 

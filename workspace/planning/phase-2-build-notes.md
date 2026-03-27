@@ -83,8 +83,29 @@ Immediate build order:
 - Echo creator setup path implemented in the upload flow
 - live API smoke test passed for user registration plus creator profile creation
 - Echo MVP acceptance review documented
-- Echo web shell now boots and bundles locally after the Expo Router entry fix
+- Echo stable web preview rebuilt as a dedicated Next.js app in `apps/echo-web`
+- Echo web production build passed and local server responded on port 3010
+- Echo web local demo environment configured through app-local env and verified without startup warnings
+- Echo web product-facing UI pass 1 completed
+- Echo web product-facing UI pass 2 completed
+- Echo web product-facing UI pass 3 completed
+- Echo beta ops kickoff document created
+- Echo seed catalog plan created
+- Echo seed catalog review sheet created
+- Echo creator onboarding playbook created
+- Echo creator cohort tracker created
+- Echo beta operator runbook created
+- Echo beta daily review template created
+- Echo beta issue log template created
 - Echo accepted for MVP build
+- API development runtime stabilized by moving away from `tsx watch`
+- live Echo seed review baseline documented from local PostgreSQL data
+- live Echo creator cohort baseline documented from local PostgreSQL data
+- Echo live verification rerun successfully against the stable compiled-watch API runtime
+- Echo batch 01 manifest created and applied locally
+- local Echo database now includes the first real internal beta catalog layer
+- Echo external cohort wave 01 documented with sourcing and outreach material
+- first public external creator shortlist documented for Wave 01
 
 ## Functional Testing Note
 
@@ -103,3 +124,6 @@ The local PostgreSQL workflow is now validated through a native PostgreSQL 16 in
 Next.js falls back to `@next/swc-wasm-nodejs` on this Windows environment because the native `@next/swc-win32-x64-msvc` binary is not loading correctly.
 
 This is currently non-blocking because builds still complete successfully.
+
+
+

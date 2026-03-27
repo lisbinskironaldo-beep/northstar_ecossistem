@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Query } from '@nestjs/common';
 import {
   CreateModerationActionInput,
   CreateReportInput,
@@ -8,7 +8,7 @@ import {
 
 @Controller('trust')
 export class TrustController {
-  constructor(private readonly trustService: TrustService) {}
+  constructor(@Inject(TrustService) private readonly trustService: TrustService) {}
 
   @Get('scores/:userId')
   getTrustScore(@Param('userId') userId: string) {
