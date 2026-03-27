@@ -23,6 +23,7 @@ Os nomes sao internos e podem ser trocados depois sem quebrar a organizacao.
 
 - [project-charter.md](C:/dev/northstar_ecosystem/docs/00-master/project-charter.md)
 - [governing-master-document.md](C:/dev/northstar_ecosystem/docs/00-master/governing-master-document.md)
+- [ecosystem-shape-and-access.md](C:/dev/northstar_ecosystem/docs/00-master/ecosystem-shape-and-access.md)
 - [execution-readiness.md](C:/dev/northstar_ecosystem/docs/00-master/execution-readiness.md)
 - [system-development-plan.md](C:/dev/northstar_ecosystem/docs/00-master/system-development-plan.md)
 - [execution-tracker.md](C:/dev/northstar_ecosystem/docs/00-master/execution-tracker.md)
@@ -42,16 +43,20 @@ Os nomes sao internos e podem ser trocados depois sem quebrar a organizacao.
 - [echo-mvp-gap-review.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-gap-review.md)
 - [echo-mvp-acceptance-review.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mvp-acceptance-review.md)
 - [echo-controlled-beta-checklist.md](C:/dev/northstar_ecosystem/docs/04-products/echo-controlled-beta-checklist.md)
+- [echo-beta-readiness-gates.md](C:/dev/northstar_ecosystem/docs/04-products/echo-beta-readiness-gates.md)
 - [echo-beta-ops-kickoff.md](C:/dev/northstar_ecosystem/docs/04-products/echo-beta-ops-kickoff.md)
 - [echo-seed-catalog-plan.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seed-catalog-plan.md)
 - [echo-seed-catalog-review-sheet.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seed-catalog-review-sheet.md)
 - [echo-seed-batch-01.md](C:/dev/northstar_ecosystem/docs/04-products/echo-seed-batch-01.md)
+- [echo-mobile-local-testing.md](C:/dev/northstar_ecosystem/docs/04-products/echo-mobile-local-testing.md)
 - [echo-creator-onboarding-playbook.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-onboarding-playbook.md)
 - [echo-creator-sourcing-map.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-sourcing-map.md)
 - [echo-creator-outreach-templates.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-outreach-templates.md)
 - [echo-creator-cohort-tracker.md](C:/dev/northstar_ecosystem/docs/04-products/echo-creator-cohort-tracker.md)
 - [echo-external-cohort-wave-01.md](C:/dev/northstar_ecosystem/docs/04-products/echo-external-cohort-wave-01.md)
 - [echo-external-shortlist-2026-03-27.md](C:/dev/northstar_ecosystem/docs/04-products/echo-external-shortlist-2026-03-27.md)
+- [echo-external-shortlist-review-2026-03-27.md](C:/dev/northstar_ecosystem/docs/04-products/echo-external-shortlist-review-2026-03-27.md)
+- [echo-outreach-wave-01-execution.md](C:/dev/northstar_ecosystem/docs/04-products/echo-outreach-wave-01-execution.md)
 - [shorts-ia.md](C:/dev/northstar_ecosystem/docs/04-products/shorts-ia.md)
 - [watch-ia.md](C:/dev/northstar_ecosystem/docs/04-products/watch-ia.md)
 - [operating-model.md](C:/dev/northstar_ecosystem/docs/05-operations/operating-model.md)
@@ -59,6 +64,7 @@ Os nomes sao internos e podem ser trocados depois sem quebrar a organizacao.
 - [command-center-mvp.md](C:/dev/northstar_ecosystem/docs/05-operations/command-center-mvp.md)
 - [admin-live-validation.md](C:/dev/northstar_ecosystem/docs/05-operations/admin-live-validation.md)
 - [echo-beta-operator-runbook.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-operator-runbook.md)
+- [echo-beta-week-01-plan.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-week-01-plan.md)
 - [echo-beta-daily-review-template.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-daily-review-template.md)
 - [echo-beta-issue-log-template.md](C:/dev/northstar_ecosystem/docs/05-operations/echo-beta-issue-log-template.md)
 - [readiness-roadmap.md](C:/dev/northstar_ecosystem/docs/06-roadmap/readiness-roadmap.md)
@@ -89,6 +95,8 @@ A empresa operara um unico sistema central.
 - API: `cmd /c npm run dev:api` (`http://127.0.0.1:3001`)
 - API watch mode secundario: `cmd /c npm run dev:api:watch`
 - Echo mobile shell continua no projeto para evolucao futura: `cmd /c npm run dev:echo:mobile`
+- Echo mobile em rede local para celular: `cmd /c npm run dev:echo:mobile:lan`
+- Echo mobile esta agora alinhado ao `Expo SDK 54`
 
 Observacao:
 

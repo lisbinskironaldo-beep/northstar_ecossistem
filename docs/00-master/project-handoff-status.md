@@ -10,9 +10,9 @@ Read this file first when resuming the project.
 
 1. `README.md`
 2. `docs/00-master/governing-master-document.md`
-3. `docs/00-master/system-development-plan.md`
-4. `docs/00-master/execution-tracker.md`
-5. `docs/06-roadmap/phase-1-execution-plan.md`
+3. `docs/00-master/ecosystem-shape-and-access.md`
+4. `docs/00-master/system-development-plan.md`
+5. `docs/00-master/execution-tracker.md`
 6. current implementation files and product docs relevant to the active build phase
 
 ## Current Snapshot
@@ -37,6 +37,7 @@ Read this file first when resuming the project.
 ## What Has Been Completed
 
 - strategic charter
+- ecosystem shape and access model
 - objectives map
 - ecosystem architecture
 - core platform concept
@@ -131,16 +132,24 @@ Read this file first when resuming the project.
 - Echo batch 01 manifest created and applied successfully to the local PostgreSQL environment
 - Echo external cohort wave 01 documented with sourcing map and outreach templates
 - first public external creator shortlist documented for Wave 01
+- Echo web preview updated to separate listener access, creator access and management conceptually
+- Echo web listener mode improved again to highlight followed artists, first-bet artists and rising creators
+- Echo beta readiness gates documented
+- Echo beta week-01 plan documented
+- public shortlist reviewed into practical A/B/hold outreach order
+- first outreach execution sheet documented with tailored opening messages
+- Echo mobile local phone testing path documented and prepared
+- Echo mobile upgraded to Expo SDK 54
 
 ## What Is Next
 
 Immediate next deliverables:
 
-1. prepare the controlled beta package
+1. send the first outreach wave to priority A candidates
 2. deepen the seed catalog for launch
 3. onboard the first creators
 4. start the first controlled Echo beta
-5. define Phase 3 review clocks and operator rhythm
+5. validate Echo on a real phone through the local mobile testing path
 
 ## Known Environment Note
 
@@ -187,6 +196,10 @@ The admin surface has also been validated live against that local data.
 The creator setup path has been smoke-tested at the API level with a real user registration and a real creator profile creation.
 
 Echo has now passed the MVP build bar and moves next into controlled beta preparation.
+
+Echo mobile is now aligned to Expo SDK 54. Workspace typecheck passes after the upgrade.
+
+Expo Doctor still leaves one residual monorepo-oriented warning in this environment about duplicate dependency inspection under the root `node_modules` path. The actionable peer dependency issues were resolved.
 
 ## How To Continue Safely
 

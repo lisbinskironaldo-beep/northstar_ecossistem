@@ -11,8 +11,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableShutdownHooks();
   const port = process.env.PORT ?? 3001;
-  await app.listen(port);
-  console.log(`Northstar API listening on port ${port}`);
+  const host = process.env.HOST ?? '0.0.0.0';
+  await app.listen(port, host);
+  console.log(`Northstar API listening on http://${host}:${port}`);
 }
 
 bootstrap();

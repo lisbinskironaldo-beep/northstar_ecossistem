@@ -18,6 +18,7 @@ It must be updated after every meaningful planning or implementation session.
 ### Phase 0: Strategic Base
 
 - [x] governing master document created
+- [x] ecosystem shape and access model documented
 - [x] objectives map created
 - [x] ecosystem architecture created
 - [x] sustainability model created
@@ -77,6 +78,14 @@ It must be updated after every meaningful planning or implementation session.
 - [x] first real Echo seed batch prepared and applied locally
 - [x] first external Echo cohort wave documented
 - [x] first public external creator shortlist documented
+- [x] Echo web access split documented in product and reflected in the preview surface
+- [x] Echo listener-mode product pass 4 completed
+- [x] Echo beta readiness gates documented
+- [x] Echo beta week 01 operating plan documented
+- [x] first public shortlist review documented with outreach priority order
+- [x] first outreach execution sheet documented
+- [x] Echo mobile local phone testing path documented
+- [x] Echo mobile upgraded from Expo SDK 52 to SDK 54
 
 ### Phase 3: Echo Launch
 
@@ -119,11 +128,11 @@ It must be updated after every meaningful planning or implementation session.
 
 ## Current Priority Queue
 
-1. prepare the controlled beta package
+1. send the first outreach wave to priority A candidates
 2. deepen the seed catalog for launch
 3. onboard the first creators
 4. start the first controlled Echo beta
-5. define Phase 3 review clocks and operator rhythm
+5. validate Echo on a real phone through the local mobile testing path
 
 ## Last Confirmed Completed Work
 
@@ -223,10 +232,17 @@ It must be updated after every meaningful planning or implementation session.
 - Echo local database now carries the first real internal beta catalog layer
 - Echo external cohort wave 01 documented with sourcing and outreach material
 - first public creator shortlist recorded for Wave 01 outreach
+- ecosystem shape and Echo access model documented for internal consultation
+- Echo web now separates listener entry, creator entry and external management conceptually in the preview
+- Echo listener-mode artist discovery now emphasizes followed names, first-bet names and rising creators
+- Echo beta readiness gates and week-01 operating plan are now documented as explicit go/no-go references
+- public shortlist now has a practical review layer with priority A, B and hold decisions
+- first outreach wave now has a concrete execution order and tailored opening messages
+- Echo mobile now targets Expo SDK 54 with React 19 / React Native 0.81 line
 
 ## Next Recommended Session Goal
 
-Run manual verification on the public shortlist, send the first outreach wave, and move the first real creators from `candidate` to `invited`.
+Send the first outreach wave to the priority A candidates and move the first real creators from `candidate` to `invited` after the messages are actually sent.
 
 
 

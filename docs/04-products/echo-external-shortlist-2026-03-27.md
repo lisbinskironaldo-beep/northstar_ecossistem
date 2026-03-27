@@ -8,6 +8,10 @@ These are not accepted creators yet.
 
 They are public candidates who appear to match the Wave 01 thesis closely enough to justify outreach.
 
+The practical review and outreach order now live in:
+
+- [echo-external-shortlist-review-2026-03-27.md](/c:/dev/northstar_ecosystem/docs/04-products/echo-external-shortlist-review-2026-03-27.md)
+
 ## Sourcing Date
 
 - date: `2026-03-27`

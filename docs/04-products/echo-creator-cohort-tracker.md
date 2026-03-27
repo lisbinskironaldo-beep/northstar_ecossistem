@@ -73,12 +73,12 @@ Replace placeholders with real handles and links as soon as candidates are ident
 
 | Creator | Handle | Source | Status | First Upload | Second Upload | Feedback | Return Likelihood | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| DARKWAVE FREQUENCIES | @DarkwaveFrequencies | public shortlist / SoundCloud + YouTube | candidate | no | no | pending | medium | strong dark-cinematic fit; good match for the night lane |
-| AGV Music | AGV Music | public shortlist / Apple Music + creator note | candidate | no | no | pending | medium | repeated releases and unusually reflective creator behavior |
-| Dizzo AI Music | @DizzoAIMusic | public shortlist / Reddit community thread | candidate | no | no | pending | unknown | useful small-creator fit for general AI music outreach |
-| Zero Yard Range | @ZeroYardRange | public shortlist / Reddit community thread | candidate | no | no | pending | unknown | alt-rock lane candidate; adds genre diversity |
-| Vibe Central Channel | @vibecentralchannel | public shortlist / Reddit community thread | candidate | no | no | pending | unknown | reggae / vibe lane candidate; broadens feed feel |
-| ECHOSYNC with AI | @ECHOSYNCwithAI | public shortlist / Reddit community thread | candidate | no | no | pending | unknown | very new AI music creator candidate with early-stage empathy value |
+| DARKWAVE FREQUENCIES | @DarkwaveFrequencies | public shortlist / SoundCloud + YouTube | candidate | no | no | pending | high | priority A; recent public activity visible; strongest dark lane fit |
+| AGV Music | AGV Music | public shortlist / Apple Music + creator note | candidate | no | no | pending | high | priority A; reflective creator voice and repeated releases |
+| Dizzo AI Music | @DizzoAIMusic | public shortlist / Reddit community thread | candidate | no | no | pending | medium | priority B; promising but still needs one stronger current public check |
+| Zero Yard Range | @ZeroYardRange | public shortlist / Reddit community thread | candidate | no | no | pending | medium | priority B; good genre diversity and backlog signal |
+| Vibe Central Channel | @vibecentralchannel | public shortlist / Reddit community thread | hold | no | no | pending | low | hold until current public verification is stronger |
+| ECHOSYNC with AI | @ECHOSYNCwithAI | public shortlist / Reddit community thread | hold | no | no | pending | low | hold; name fit was interesting but public verification is too noisy |
 | King Willonius | King Willonius | public shortlist / official site | hold | no | no | pending | low | important benchmark but likely too large for Wave 01 learning goals |
 | ImOliver | @imoliver | public shortlist / Suno profile | hold | no | no | pending | low | benchmark creator, probably too advanced for early beta learning |
 | Wave 01 Reserve 03 | pending | coherent experimental creator | candidate | no | no | pending | unknown | reserve slot still open for edge-of-feed testing |

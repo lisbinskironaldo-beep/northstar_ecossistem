@@ -106,6 +106,14 @@ Immediate build order:
 - local Echo database now includes the first real internal beta catalog layer
 - Echo external cohort wave 01 documented with sourcing and outreach material
 - first public external creator shortlist documented for Wave 01
+- Echo web preview updated to separate listener entry and creator entry more clearly
+- Echo web listener mode improved again with stronger artist discovery framing
+- Echo beta readiness gates documented
+- Echo beta week-01 plan documented
+- public shortlist reviewed into a practical priority order for outreach
+- first outreach execution sheet documented
+- Echo mobile local phone testing path documented and prepared
+- Echo mobile upgraded from Expo SDK 52 to SDK 54
 
 ## Functional Testing Note
 

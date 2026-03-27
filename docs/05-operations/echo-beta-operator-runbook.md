@@ -6,6 +6,12 @@ This runbook defines the minimum operating routine for the controlled Echo beta.
 
 It exists so beta management does not depend on memory or improvisation.
 
+Use this together with:
+
+- [echo-controlled-beta-checklist.md](/c:/dev/northstar_ecosystem/docs/04-products/echo-controlled-beta-checklist.md)
+- [echo-beta-readiness-gates.md](/c:/dev/northstar_ecosystem/docs/04-products/echo-beta-readiness-gates.md)
+- [echo-beta-week-01-plan.md](/c:/dev/northstar_ecosystem/docs/05-operations/echo-beta-week-01-plan.md)
+
 ## Operator Goals
 
 During beta, the operator must protect:

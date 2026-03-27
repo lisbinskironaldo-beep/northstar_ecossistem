@@ -16,6 +16,8 @@
     "dev:admin": "npm run dev --workspace @northstar/admin-web",
     "dev:echo": "npm run dev --workspace @northstar/echo-web",
     "dev:echo:mobile": "npm run start --workspace @northstar/echo-mobile",
+    "dev:echo:mobile:lan": "npm run start --workspace @northstar/echo-mobile -- --lan --clear --port 8082",
+    "dev:echo:mobile:tunnel": "npm run start --workspace @northstar/echo-mobile -- --tunnel --clear --port 8083",
     "build:api": "npm run build --workspace @northstar/api",
     "build:echo": "npm run build --workspace @northstar/echo-web",
     "db:generate": "prisma generate --schema infra/database/prisma/schema.prisma",

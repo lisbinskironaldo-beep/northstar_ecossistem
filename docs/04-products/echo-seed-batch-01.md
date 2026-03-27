@@ -83,6 +83,7 @@ The batch can be applied with:
 
 ```powershell
 cmd /c npm run seed:echo:batch-01
+```
 
 ## Applied Local Result
 
@@ -103,4 +104,3 @@ Observed result after application:
 That means the local Echo environment is no longer running only on smoke-test content.
 
 It now has the first real internal beta catalog layer.
-```

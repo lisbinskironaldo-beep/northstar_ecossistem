@@ -8,6 +8,12 @@ It is not the public launch checklist.
 
 It is the first-risk containment checklist.
 
+Related documents:
+
+- [echo-beta-readiness-gates.md](/c:/dev/northstar_ecosystem/docs/04-products/echo-beta-readiness-gates.md)
+- [echo-beta-week-01-plan.md](/c:/dev/northstar_ecosystem/docs/05-operations/echo-beta-week-01-plan.md)
+- [echo-beta-operator-runbook.md](/c:/dev/northstar_ecosystem/docs/05-operations/echo-beta-operator-runbook.md)
+
 ## Beta Goal
 
 Validate:
@@ -58,6 +64,8 @@ Validate:
 - [x] daily review rhythm is scheduled
 - [x] issue logging path is defined
 - [x] rollback rule is defined
+- [x] week-01 beta operating plan is defined
+- [x] explicit beta entry gates are defined
 
 ## Beta Operating Rhythm
 
