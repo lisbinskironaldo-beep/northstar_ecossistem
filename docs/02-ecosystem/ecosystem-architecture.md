@@ -23,6 +23,8 @@ Responsavel por:
 Responsavel por:
 
 - identidade e autenticacao
+- workspace de creator
+- multiartist personas por conta
 - perfis
 - trust score
 - upload pipeline
@@ -30,6 +32,7 @@ Responsavel por:
 - analytics
 - antifraude
 - moderacao e reports
+- camada de acesso de conteudo sensivel
 - politicas de direitos
 
 ### Camada 3: Produtos publicos
@@ -63,10 +66,15 @@ Responsavel por:
 ## Regras de integracao
 
 - mesma conta pode servir para as tres frentes
-- mesmo criador pode existir nas tres frentes
+- mesmo workspace de creator pode operar nas tres frentes
+- a mesma conta pode ter multiplos artistas ou personas publicas
 - mesmos mecanismos de confianca governam todas as frentes
 - cada frente usa metricas especificas para ranking
 - a experiencia do usuario nao precisa parecer conectada
+
+Referencia:
+
+- [creator-ecosystem-layer.md](/c:/dev/northstar_ecosystem/docs/02-ecosystem/creator-ecosystem-layer.md)
 
 ## Regras de isolamento
 

@@ -57,3 +57,11 @@ Great. Here's the beta path:
 
 This is a controlled beta, so the most useful thing you can give us is honest friction, not polished praise.
 ```
+
+## Operator Rule After Acceptance
+
+After this message is sent:
+
+- change the creator to `accepted`
+- do not mark `onboarded`
+- wait for the intake bar to complete inside the product

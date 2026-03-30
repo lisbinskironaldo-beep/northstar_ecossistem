@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 
 export function PageShell({
@@ -271,6 +272,44 @@ export function ActionButton({
     >
       {label}
     </button>
+  );
+}
+
+export function LinkButton({
+  href,
+  label,
+  tone = 'default',
+}: {
+  href: string;
+  label: string;
+  tone?: 'default' | 'secondary' | 'danger';
+}) {
+  const styles =
+    tone === 'danger'
+      ? { background: '#7f1d1d', border: '#991b1b' }
+      : tone === 'secondary'
+        ? { background: '#334155', border: '#475569' }
+        : { background: '#111827', border: '#1f2937' };
+
+  return (
+    <Link
+      href={href}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 999,
+        padding: '10px 14px',
+        border: `1px solid ${styles.border}`,
+        background: styles.background,
+        color: '#f8fafc',
+        fontWeight: 700,
+        boxShadow: '0 10px 24px rgba(0, 0, 0, 0.18)',
+        textDecoration: 'none',
+      }}
+    >
+      {label}
+    </Link>
   );
 }
 

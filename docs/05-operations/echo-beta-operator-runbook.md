@@ -11,6 +11,8 @@ Use this together with:
 - [echo-controlled-beta-checklist.md](/c:/dev/northstar_ecosystem/docs/04-products/echo-controlled-beta-checklist.md)
 - [echo-beta-readiness-gates.md](/c:/dev/northstar_ecosystem/docs/04-products/echo-beta-readiness-gates.md)
 - [echo-beta-week-01-plan.md](/c:/dev/northstar_ecosystem/docs/05-operations/echo-beta-week-01-plan.md)
+- [echo-creator-onboarding-state-model.md](/c:/dev/northstar_ecosystem/docs/05-operations/echo-creator-onboarding-state-model.md)
+- [echo-creator-week-01-scorecard.md](/c:/dev/northstar_ecosystem/docs/05-operations/echo-creator-week-01-scorecard.md)
 
 ## Operator Goals
 
@@ -30,6 +32,7 @@ Check:
 - feed health
 - saves
 - follows
+- creator state changes (`invited`, `accepted`, `onboarded`)
 - uploads from the last 24 hours
 - report queue
 
@@ -38,6 +41,8 @@ Check:
 Check:
 
 - unresolved creator friction
+- creators stuck between `accepted` and `onboarded`
+- weak week-one pulse
 - repeated user complaints
 - weak or repetitive feed patterns
 
@@ -69,6 +74,7 @@ Pause or narrow the beta if:
 - reports are not closing properly
 - the feed becomes obviously weak
 - creators are confused at the same step repeatedly
+- accepted creators are not becoming onboarded
 - operator trust in the dashboard drops
 
 ## Rollback Rule
@@ -85,6 +91,7 @@ The operator should answer these every day:
 
 - did listeners find something worth saving?
 - did creators upload without operator rescue?
+- who is still accepted but not truly onboarded?
 - did moderation stay manageable?
 - did the feed feel more alive or more noisy?
 - is the product getting stronger, or only busier?
@@ -98,3 +105,9 @@ At the end of the beta window, produce:
 - trust summary
 - catalog summary
 - recommendation: widen, hold, or rerun
+
+## Per-Creator Rule
+
+Once a creator becomes `onboarded`, keep a simple week-one scorecard for that persona.
+
+Do not rely only on memory across days.

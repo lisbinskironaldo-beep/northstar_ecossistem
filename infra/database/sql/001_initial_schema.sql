@@ -68,6 +68,7 @@ create table if not exists tracks (
   id uuid primary key,
   content_id uuid not null unique references content_items(id),
   artist_name_display text not null,
+  access_room text not null default 'standard',
   explicit_flag boolean not null default false,
   release_type text,
   ai_declaration boolean not null,

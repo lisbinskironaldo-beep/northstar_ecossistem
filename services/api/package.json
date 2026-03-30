@@ -12,12 +12,15 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
     "@nestjs/common": "^11.0.17",
     "@nestjs/core": "^11.0.17",
     "@nestjs/platform-express": "^11.0.17",
     "@prisma/client": "^6.5.0",
+    "dotenv": "^17.2.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
   }
 }

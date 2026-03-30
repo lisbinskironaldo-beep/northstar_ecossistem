@@ -90,6 +90,12 @@ After a message is actually sent:
 2. add the send date in the notes column
 3. if there is no answer after a reasonable wait, use the follow-up template
 
+After a positive reply:
+
+1. change the creator from `invited` to `accepted`
+2. do not mark `onboarded` yet
+3. only move to `onboarded` after the intake bar is complete inside the product
+
 ## Practical Reminder
 
 The first wave is not a growth campaign.

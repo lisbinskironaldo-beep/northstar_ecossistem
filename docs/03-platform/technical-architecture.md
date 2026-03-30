@@ -66,6 +66,10 @@ Recommended workspace layout:
 - `packages/config`
 - `packages/ui`
 
+Repository architecture reference:
+
+- [project-repository-architecture.md](/c:/dev/northstar_ecosystem/docs/03-platform/project-repository-architecture.md)
+
 ## Service Modules
 
 - Identity Service
@@ -95,10 +99,12 @@ Core relational tables:
 - users
 - accounts
 - creator_profiles
+- artist_personas
 - content_items
 - content_assets
 - tracks
 - categories
+- content_access_flags
 - follows
 - saves
 - playback_sessions

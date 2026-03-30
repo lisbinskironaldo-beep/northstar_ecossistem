@@ -2,7 +2,6 @@
   "expo": {
     "name": "Echo",
     "slug": "echo-mobile",
-    "scheme": "echo",
-    "plugins": ["expo-router"]
+    "scheme": "echo"
   }
 }

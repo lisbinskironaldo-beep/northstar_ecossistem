@@ -89,3 +89,22 @@ During onboarding, capture:
 Do not over-explain the platform during onboarding.
 
 If too much explanation is needed, the product is still too confusing.
+
+## Practical Sequence
+
+Run onboarding in this order:
+
+1. invite
+2. accepted reply
+3. beta packet sent
+4. creator enters the workspace
+5. creator clears intake bar
+6. only then mark `onboarded`
+
+## State Reminder
+
+Keep these meanings strict:
+
+- `invited`: message sent
+- `accepted`: creator said yes
+- `onboarded`: intake bar complete in product

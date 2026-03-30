@@ -1,3 +1,15 @@
+export interface EchoContentAsset {
+  id: string;
+  assetRole: string;
+  storageProvider: string;
+  storageKey: string;
+  mimeType: string;
+  durationMs?: number | null;
+  transcodedState: string;
+  createdAt: string;
+  publicPath: string;
+}
+
 export interface EchoTrack {
   id: string;
   title: string;
@@ -5,14 +17,23 @@ export interface EchoTrack {
   contentState: string;
   visibilityState: string;
   createdAt: string;
+  assets?: EchoContentAsset[];
+  primaryCategory?: {
+    id: string;
+    slug: string;
+    displayName: string;
+  } | null;
   creator: {
     id: string;
     displayName: string;
     handle: string;
+    followerCountCached?: number;
+    publishedContentCountCached?: number;
   };
   track: {
     id: string;
     artistNameDisplay: string;
+    accessRoom?: string | null;
     aiDeclaration: boolean;
     sourceToolOptional?: string | null;
   } | null;
@@ -117,6 +138,7 @@ export interface CreateTrackPayload {
   description?: string;
   primaryCategoryId?: string;
   artistNameDisplay: string;
+  accessRoom?: string;
   aiDeclaration: boolean;
   sourceToolOptional?: string;
 }
@@ -154,8 +176,8 @@ export const echoApi = {
   baseUrl: API_BASE_URL,
   demoUserId: DEMO_USER_ID,
   demoCreatorId: DEMO_CREATOR_ID,
-  getTracks() {
-    return fetchJson<EchoTrack[]>('/content/tracks?surface=echo&limit=20');
+  getTracks(limit = 20) {
+    return fetchJson<EchoTrack[]>(`/content/tracks?surface=echo&limit=${limit}`);
   },
   getSavedTracks(userId = DEMO_USER_ID) {
     if (!userId) {

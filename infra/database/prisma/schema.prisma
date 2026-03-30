@@ -96,6 +96,7 @@ model Track {
   id                String      @id @db.Uuid
   contentId         String      @unique @db.Uuid
   artistNameDisplay String
+  accessRoom        String      @default("standard")
   explicitFlag      Boolean     @default(false)
   releaseType       String?
   aiDeclaration     Boolean

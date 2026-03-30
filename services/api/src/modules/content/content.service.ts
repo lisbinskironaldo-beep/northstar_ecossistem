@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AnalyticsService } from '../analytics/analytics.service';
@@ -10,6 +10,7 @@ export interface ListCategoriesInput {
 export interface ListTracksInput {
   surface?: 'echo' | 'pulse' | 'lumen';
   limit?: number;
+  creatorId?: string;
 }
 
 export interface CreateTrackInput {
@@ -18,6 +19,7 @@ export interface CreateTrackInput {
   description?: string;
   primaryCategoryId?: string;
   artistNameDisplay: string;
+  accessRoom?: string;
   aiDeclaration: boolean;
   sourceToolOptional?: string;
 }
@@ -39,6 +41,17 @@ export interface RecordPlaybackInput {
 export interface ListSavedTracksInput {
   userId: string;
 }
+
+const contentAssetSelect = {
+  id: true,
+  assetRole: true,
+  storageProvider: true,
+  storageKey: true,
+  mimeType: true,
+  durationMs: true,
+  transcodedState: true,
+  createdAt: true,
+} as const;
 
 @Injectable()
 export class ContentService {
@@ -63,10 +76,12 @@ export class ContentService {
   }
 
   listTracks(input: ListTracksInput) {
-    return this.prisma.contentItem.findMany({
+    return this.prisma.contentItem
+      .findMany({
       where: {
         productSurface: input.surface ?? 'echo',
         contentType: 'track',
+        creatorId: input.creatorId,
       },
       orderBy: { createdAt: 'desc' },
       take: input.limit ?? 20,
@@ -77,27 +92,43 @@ export class ContentService {
         contentState: true,
         visibilityState: true,
         createdAt: true,
+        assets: {
+          orderBy: { createdAt: 'asc' },
+          select: contentAssetSelect,
+        },
+        primaryCategory: {
+          select: {
+            id: true,
+            slug: true,
+            displayName: true,
+          },
+        },
         creator: {
           select: {
             id: true,
             displayName: true,
             handle: true,
+            followerCountCached: true,
+            publishedContentCountCached: true,
           },
         },
         track: {
           select: {
             id: true,
             artistNameDisplay: true,
+            accessRoom: true,
             aiDeclaration: true,
             sourceToolOptional: true,
           },
         },
       },
-    });
+      })
+      .then((tracks) => tracks.map((track) => this.decorateTrack(track)));
   }
 
   listSavedTracks(input: ListSavedTracksInput) {
-    return this.prisma.save.findMany({
+    return this.prisma.save
+      .findMany({
       where: {
         userId: input.userId,
         content: {
@@ -119,17 +150,31 @@ export class ContentService {
             contentState: true,
             visibilityState: true,
             createdAt: true,
+            assets: {
+              orderBy: { createdAt: 'asc' },
+              select: contentAssetSelect,
+            },
+            primaryCategory: {
+              select: {
+                id: true,
+                slug: true,
+                displayName: true,
+              },
+            },
             creator: {
               select: {
                 id: true,
                 displayName: true,
                 handle: true,
+                followerCountCached: true,
+                publishedContentCountCached: true,
               },
             },
             track: {
               select: {
                 id: true,
                 artistNameDisplay: true,
+                accessRoom: true,
                 aiDeclaration: true,
                 sourceToolOptional: true,
               },
@@ -137,7 +182,66 @@ export class ContentService {
           },
         },
       },
+      })
+      .then((entries) =>
+        entries.map((entry) => ({
+          ...entry,
+          content: this.decorateTrack(entry.content),
+        })),
+      );
+  }
+
+  async getTrack(contentId: string) {
+    const track = await this.prisma.contentItem.findFirst({
+      where: {
+        id: contentId,
+        productSurface: 'echo',
+        contentType: 'track',
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        contentState: true,
+        visibilityState: true,
+        createdAt: true,
+        assets: {
+          orderBy: { createdAt: 'asc' },
+          select: contentAssetSelect,
+        },
+        primaryCategory: {
+          select: {
+            id: true,
+            slug: true,
+            displayName: true,
+          },
+        },
+        creator: {
+          select: {
+            id: true,
+            displayName: true,
+            handle: true,
+            followerCountCached: true,
+            publishedContentCountCached: true,
+          },
+        },
+        track: {
+          select: {
+            id: true,
+            artistNameDisplay: true,
+            accessRoom: true,
+            aiDeclaration: true,
+            sourceToolOptional: true,
+          },
+        },
+      },
     });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    return this.decorateTrack(track);
   }
 
   async createTrack(input: CreateTrackInput) {
@@ -160,6 +264,7 @@ export class ContentService {
           create: {
             id: randomUUID(),
             artistNameDisplay: input.artistNameDisplay,
+            accessRoom: input.accessRoom ?? 'standard',
             aiDeclaration: input.aiDeclaration,
             sourceToolOptional: input.sourceToolOptional,
           },
@@ -175,10 +280,22 @@ export class ContentService {
         title: true,
         description: true,
         createdAt: true,
+        assets: {
+          orderBy: { createdAt: 'asc' },
+          select: contentAssetSelect,
+        },
+        primaryCategory: {
+          select: {
+            id: true,
+            slug: true,
+            displayName: true,
+          },
+        },
         track: {
           select: {
             id: true,
             artistNameDisplay: true,
+            accessRoom: true,
             aiDeclaration: true,
             sourceToolOptional: true,
           },
@@ -193,11 +310,12 @@ export class ContentService {
       productSurface: 'echo',
       payloadJson: {
         title: track.title,
+        accessRoom: track.track?.accessRoom ?? 'standard',
         aiDeclaration: track.track?.aiDeclaration ?? true,
       },
     });
 
-    return track;
+    return this.decorateTrack(track);
   }
 
   async createSave(input: CreateSaveInput) {
@@ -291,5 +409,26 @@ export class ContentService {
     });
 
     return playback;
+  }
+
+  private decorateTrack<
+    T extends {
+      assets?: Array<{
+        storageProvider: string;
+        storageKey: string;
+      }>;
+    },
+  >(track: T) {
+    return {
+      ...track,
+      assets:
+        track.assets?.map((asset) => ({
+          ...asset,
+          publicPath:
+            asset.storageProvider === 'remote_url' || /^https?:\/\//i.test(asset.storageKey)
+              ? asset.storageKey
+              : `/media/${asset.storageKey}`,
+        })) ?? [],
+    };
   }
 }

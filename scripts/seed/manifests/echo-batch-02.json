@@ -1,0 +1,272 @@
+{
+  "batchId": "echo-batch-02",
+  "surface": "echo",
+  "defaultCountry": "BR",
+  "defaultLanguage": "pt-BR",
+  "audioAssetPool": [
+    {
+      "assetRole": "audio_stream",
+      "storageProvider": "local_static",
+      "storageKey": "audio/echo-tone-01.wav",
+      "mimeType": "audio/wav",
+      "durationMs": 40000,
+      "transcodedState": "ready"
+    },
+    {
+      "assetRole": "audio_stream",
+      "storageProvider": "local_static",
+      "storageKey": "audio/echo-tone-02.wav",
+      "mimeType": "audio/wav",
+      "durationMs": 40000,
+      "transcodedState": "ready"
+    },
+    {
+      "assetRole": "audio_stream",
+      "storageProvider": "local_static",
+      "storageKey": "audio/echo-tone-03.wav",
+      "mimeType": "audio/wav",
+      "durationMs": 24000,
+      "transcodedState": "ready"
+    }
+  ],
+  "previewAssetPool": [
+    {
+      "assetRole": "audio_preview",
+      "storageProvider": "local_static",
+      "storageKey": "audio/echo-tone-01.wav",
+      "mimeType": "audio/wav",
+      "durationMs": 20000,
+      "transcodedState": "ready"
+    },
+    {
+      "assetRole": "audio_preview",
+      "storageProvider": "local_static",
+      "storageKey": "audio/echo-tone-02.wav",
+      "mimeType": "audio/wav",
+      "durationMs": 20000,
+      "transcodedState": "ready"
+    },
+    {
+      "assetRole": "audio_preview",
+      "storageProvider": "local_static",
+      "storageKey": "audio/echo-tone-03.wav",
+      "mimeType": "audio/wav",
+      "durationMs": 20000,
+      "transcodedState": "ready"
+    }
+  ],
+  "categories": [
+    { "slug": "lo-fi", "displayName": "Lo-fi", "rankOrder": 10 },
+    { "slug": "trap", "displayName": "Trap", "rankOrder": 20 },
+    { "slug": "electronic", "displayName": "Electronic", "rankOrder": 30 },
+    { "slug": "ambient", "displayName": "Ambient", "rankOrder": 40 },
+    { "slug": "dark", "displayName": "Dark", "rankOrder": 50 },
+    { "slug": "pop-ia", "displayName": "Pop IA", "rankOrder": 60 },
+    { "slug": "instrumental", "displayName": "Instrumental", "rankOrder": 70 },
+    { "slug": "experimental", "displayName": "Experimental", "rankOrder": 80 }
+  ],
+  "creators": [
+    {
+      "email": "cinder.south@northstar.local",
+      "displayName": "Cinder South",
+      "handle": "cinder-south",
+      "bio": "Nocturnal electronic cuts for denser late-session listening.",
+      "tracks": [
+        {
+          "title": "Southbound Halo",
+          "description": "A polished darker opener that still feels replayable.",
+          "artistNameDisplay": "Cinder South",
+          "categorySlug": "electronic",
+          "catalogStatus": "opening",
+          "feedRank": 4
+        },
+        {
+          "title": "Static Motel Sign",
+          "description": "A colder reserve cut for when the feed needs more night identity.",
+          "artistNameDisplay": "Cinder South",
+          "categorySlug": "dark",
+          "catalogStatus": "reserve",
+          "feedRank": 27
+        },
+        {
+          "title": "Midcity Embers",
+          "description": "A softer low-light track that can support longer sessions.",
+          "artistNameDisplay": "Cinder South",
+          "categorySlug": "ambient",
+          "catalogStatus": "opening",
+          "feedRank": 18
+        }
+      ]
+    },
+    {
+      "email": "opal.kite@northstar.local",
+      "displayName": "Opal Kite",
+      "handle": "opal-kite",
+      "bio": "Airy melodic pieces aimed at public library saves.",
+      "tracks": [
+        {
+          "title": "Soft Current Avenue",
+          "description": "A warmer melodic track for broad replay appeal.",
+          "artistNameDisplay": "Opal Kite",
+          "categorySlug": "pop-ia",
+          "catalogStatus": "opening",
+          "feedRank": 5
+        },
+        {
+          "title": "Cloud District Glass",
+          "description": "Reserve lane for lighter public-folder identity.",
+          "artistNameDisplay": "Opal Kite",
+          "categorySlug": "electronic",
+          "catalogStatus": "reserve",
+          "feedRank": 29
+        },
+        {
+          "title": "Paper Satellite",
+          "description": "Calmer support track for gentle return sessions.",
+          "artistNameDisplay": "Opal Kite",
+          "categorySlug": "ambient",
+          "catalogStatus": "opening",
+          "feedRank": 21
+        }
+      ]
+    },
+    {
+      "email": "juniper.frames@northstar.local",
+      "displayName": "Juniper Frames",
+      "handle": "juniper-frames",
+      "bio": "Soft instrumental sketches for focus and repeat listening.",
+      "tracks": [
+        {
+          "title": "Windowline Field",
+          "description": "Instrumental support track for private-library and offline use.",
+          "artistNameDisplay": "Juniper Frames",
+          "categorySlug": "instrumental",
+          "catalogStatus": "opening",
+          "feedRank": 19
+        },
+        {
+          "title": "Quiet Thermal",
+          "description": "A reserve instrumental piece for calmer refreshes.",
+          "artistNameDisplay": "Juniper Frames",
+          "categorySlug": "instrumental",
+          "catalogStatus": "reserve",
+          "feedRank": 28
+        },
+        {
+          "title": "Lamp Drift Geometry",
+          "description": "A lighter ambient-instrumental bridge track.",
+          "artistNameDisplay": "Juniper Frames",
+          "categorySlug": "ambient",
+          "catalogStatus": "opening",
+          "feedRank": 24
+        }
+      ]
+    },
+    {
+      "email": "pearl.comet@northstar.local",
+      "displayName": "Pearl Comet",
+      "handle": "pearl-comet",
+      "bio": "Lighter playful AI songs suitable for a future kids room.",
+      "tracks": [
+        {
+          "title": "Sun Maze Parade",
+          "description": "A bright playful track that belongs outside the main feed by default.",
+          "artistNameDisplay": "Pearl Comet",
+          "categorySlug": "pop-ia",
+          "catalogStatus": "opening",
+          "feedRank": 30,
+          "accessRoom": "kids"
+        },
+        {
+          "title": "Bubble Route Echo",
+          "description": "A second kids-room track to keep that room from feeling empty.",
+          "artistNameDisplay": "Pearl Comet",
+          "categorySlug": "pop-ia",
+          "catalogStatus": "reserve",
+          "feedRank": 31,
+          "accessRoom": "kids"
+        },
+        {
+          "title": "Ribbon Weather",
+          "description": "A gentle melodic variation for a future lighter family lane.",
+          "artistNameDisplay": "Pearl Comet",
+          "categorySlug": "ambient",
+          "catalogStatus": "reserve",
+          "feedRank": 32,
+          "accessRoom": "kids"
+        }
+      ]
+    },
+    {
+      "email": "mirror.spoof@northstar.local",
+      "displayName": "Mirror Spoof",
+      "handle": "mirror-spoof",
+      "bio": "Parody-first experiments for separate-room discovery only.",
+      "tracks": [
+        {
+          "title": "Mall Anthem But Wrong",
+          "description": "A parody-room cut meant to prove the room system works.",
+          "artistNameDisplay": "Mirror Spoof",
+          "categorySlug": "experimental",
+          "catalogStatus": "opening",
+          "feedRank": 33,
+          "accessRoom": "parody"
+        },
+        {
+          "title": "City Pop Ghost Joke",
+          "description": "A second parody lane entry for low-cost room coverage.",
+          "artistNameDisplay": "Mirror Spoof",
+          "categorySlug": "experimental",
+          "catalogStatus": "reserve",
+          "feedRank": 34,
+          "accessRoom": "parody"
+        },
+        {
+          "title": "Jingle Mirage",
+          "description": "A lighter parody-room support track.",
+          "artistNameDisplay": "Mirror Spoof",
+          "categorySlug": "pop-ia",
+          "catalogStatus": "reserve",
+          "feedRank": 35,
+          "accessRoom": "parody"
+        }
+      ]
+    },
+    {
+      "email": "ghost.vector@northstar.local",
+      "displayName": "Ghost Vector",
+      "handle": "ghost-vector",
+      "bio": "Clone-inspired and restricted-edge tracks for access testing and later governance.",
+      "tracks": [
+        {
+          "title": "Almost Someone Else",
+          "description": "A clone-inspired lane test that must stay out of the default feed.",
+          "artistNameDisplay": "Ghost Vector",
+          "categorySlug": "dark",
+          "catalogStatus": "opening",
+          "feedRank": 36,
+          "accessRoom": "clone_inspired"
+        },
+        {
+          "title": "Velour Alias",
+          "description": "A second clone-inspired asset for access-governance testing.",
+          "artistNameDisplay": "Ghost Vector",
+          "categorySlug": "experimental",
+          "catalogStatus": "reserve",
+          "feedRank": 37,
+          "accessRoom": "clone_inspired"
+        },
+        {
+          "title": "After Midnight Redline",
+          "description": "An explicit-room edge case for separate access and moderation checks.",
+          "artistNameDisplay": "Ghost Vector",
+          "categorySlug": "trap",
+          "catalogStatus": "reserve",
+          "feedRank": 38,
+          "accessRoom": "explicit",
+          "explicitFlag": true
+        }
+      ]
+    }
+  ]
+}

@@ -32,6 +32,7 @@ async function main() {
   const createdUsers = [];
   const createdCreators = [];
   const createdTracks = [];
+  let createdAssets = 0;
   const skippedTracks = [];
 
   for (const category of manifest.categories ?? []) {
@@ -66,7 +67,7 @@ async function main() {
 
   const categoryMap = new Map(categories.map((category) => [category.slug, category.id]));
 
-  for (const creatorEntry of manifest.creators ?? []) {
+  for (const [creatorIndex, creatorEntry] of (manifest.creators ?? []).entries()) {
     let user = await prisma.user.findUnique({
       where: { email: creatorEntry.email },
       select: { id: true, email: true },
@@ -115,6 +116,12 @@ async function main() {
     }
 
     for (const [index, trackEntry] of (creatorEntry.tracks ?? []).entries()) {
+      const trackAssets = resolveTrackAssets({
+        manifest,
+        creatorIndex,
+        trackIndex: index,
+        trackEntry,
+      });
       const existingTrack = await prisma.contentItem.findFirst({
         where: {
           creatorId: creator.id,
@@ -126,6 +133,12 @@ async function main() {
       });
 
       if (existingTrack) {
+        createdAssets += await ensureTrackAssets({
+          prisma,
+          contentId: existingTrack.id,
+          createdAt: now,
+          assets: trackAssets,
+        });
         skippedTracks.push(`${creatorEntry.handle}/${trackEntry.title}`);
         continue;
       }
@@ -163,6 +176,8 @@ async function main() {
             create: {
               id: randomUUID(),
               artistNameDisplay: trackEntry.artistNameDisplay ?? creatorEntry.displayName,
+              accessRoom: trackEntry.accessRoom ?? 'standard',
+              explicitFlag: trackEntry.explicitFlag ?? false,
               releaseType: trackEntry.releaseType ?? 'single',
               aiDeclaration: trackEntry.aiDeclaration ?? true,
               sourceToolOptional: trackEntry.sourceToolOptional ?? manifest.batchId,
@@ -173,6 +188,13 @@ async function main() {
           id: true,
           title: true,
         },
+      });
+
+      createdAssets += await ensureTrackAssets({
+        prisma,
+        contentId: content.id,
+        createdAt,
+        assets: trackAssets,
       });
 
       createdTracks.push(`${creatorEntry.handle}/${content.title}`);
@@ -219,6 +241,7 @@ async function main() {
   console.log(`Created users: ${createdUsers.length}`);
   console.log(`Created creators: ${createdCreators.length}`);
   console.log(`Created tracks: ${createdTracks.length}`);
+  console.log(`Created assets: ${createdAssets}`);
   console.log(`Skipped tracks: ${skippedTracks.length}`);
   console.log(`Opening visible tracks now: ${openingCount}`);
   console.log(`Reserve suppressed tracks now: ${reserveCount}`);
@@ -254,4 +277,72 @@ function loadEnvFile(filePath) {
       process.env[key] = value;
     }
   }
+}
+
+function resolveTrackAssets({ manifest, creatorIndex, trackIndex, trackEntry }) {
+  if (Array.isArray(trackEntry.assets) && trackEntry.assets.length > 0) {
+    return trackEntry.assets;
+  }
+
+  const assets = [];
+
+  if (Array.isArray(manifest.audioAssetPool) && manifest.audioAssetPool.length > 0) {
+    assets.push(manifest.audioAssetPool[(creatorIndex + trackIndex) % manifest.audioAssetPool.length]);
+  }
+
+  if (Array.isArray(manifest.previewAssetPool) && manifest.previewAssetPool.length > 0) {
+    assets.push(
+      manifest.previewAssetPool[(creatorIndex + trackIndex) % manifest.previewAssetPool.length],
+    );
+  }
+
+  return assets;
+}
+
+async function ensureTrackAssets({ prisma, contentId, createdAt, assets }) {
+  if (!Array.isArray(assets) || assets.length === 0) {
+    return 0;
+  }
+
+  const existingAssets = await prisma.contentAsset.findMany({
+    where: { contentId },
+    select: {
+      assetRole: true,
+      storageProvider: true,
+      storageKey: true,
+    },
+  });
+
+  let createdCount = 0;
+
+  for (const asset of assets) {
+    const duplicate = existingAssets.some(
+      (existingAsset) =>
+        existingAsset.assetRole === asset.assetRole &&
+        existingAsset.storageProvider === asset.storageProvider &&
+        existingAsset.storageKey === asset.storageKey,
+    );
+
+    if (duplicate) {
+      continue;
+    }
+
+    await prisma.contentAsset.create({
+      data: {
+        id: randomUUID(),
+        contentId,
+        assetRole: asset.assetRole ?? 'audio_stream',
+        storageProvider: asset.storageProvider ?? 'local_static',
+        storageKey: asset.storageKey,
+        mimeType: asset.mimeType ?? 'audio/wav',
+        durationMs: asset.durationMs ?? 40000,
+        transcodedState: asset.transcodedState ?? 'ready',
+        createdAt,
+      },
+    });
+
+    createdCount += 1;
+  }
+
+  return createdCount;
 }

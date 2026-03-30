@@ -30,6 +30,29 @@ Watch:
 - did they understand what Echo is quickly?
 - did anyone save without being told twice?
 - did creators get through setup and upload without rescue?
+- did each creator persona show a usable week-one pulse?
+
+## Creator Week 01 Pulse
+
+For each creator persona, read only:
+
+- `Abertura`
+- `Folga ativa`
+- `Publicadas`
+- `Reserva`
+
+This is enough for the first week.
+
+Do not inflate week one with a heavy dashboard.
+
+## Operator Use
+
+Treat the pulse as a go/no-go read:
+
+- weak abertura: hold onboarding
+- no second upload: still early
+- zero folga ativa: cleanup before next push
+- reserve too large too early: review clutter and release choice
 
 ## Day 2: First Adjustment
 

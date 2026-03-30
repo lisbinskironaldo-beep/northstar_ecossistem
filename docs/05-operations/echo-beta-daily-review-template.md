@@ -33,6 +33,10 @@ Fill one copy per day during beta.
 - repeated confusion:
 - external invites sent:
 - external invites accepted:
+- accepted but not onboarded:
+- onboarded today:
+- weak week-one pulse:
+- creator scorecards updated:
 
 ## Moderation Signals
 

@@ -14,6 +14,9 @@ That means:
 - no APK download flow is needed yet
 - the phone can open the app through Expo Go on the same network
 - the mobile app is now aligned to `Expo SDK 54`
+- the mobile bootstrap now uses a standard Expo `index.js` entry
+- the mobile workspace now resolves to a single React version again
+- the API now serves local sample audio under `/media/*` for internal playback validation
 
 ## What It Is Not Yet
 
@@ -29,13 +32,21 @@ It is a real phone test path for the current MVP.
 
 The phone and the development machine must be on the same Wi-Fi network.
 
-The local machine address currently used for Echo mobile is:
+The local machine address changes with the Wi-Fi network.
 
-- `10.0.0.149`
+Echo mobile LAN mode now refreshes the API base automatically before Expo starts.
 
-If that local IP changes later, update:
+It also picks a free Metro port automatically if `8082` is already occupied.
+
+That means the recommended command is:
+
+- `cmd /c npm run dev:echo:mobile:lan`
+
+That script rewrites:
 
 - [apps/echo-mobile/.env.local](/c:/dev/northstar_ecosystem/apps/echo-mobile/.env.local)
+
+with the current LAN IP of the machine before opening Metro.
 
 ## Start Order
 
@@ -64,11 +75,19 @@ Then:
 - scan the QR code shown in the terminal
 - open the project in Expo Go
 
+If Expo Go still shows an old broken session:
+
+- fully close Expo Go
+- reopen Expo Go
+- scan a fresh QR code after restarting Metro
+- if needed, clear Expo Go local history for this project before reopening
+
 ## What Should Work In This Mobile Test
 
 - feed load
 - save
 - playback registration
+- local preview and fixed-player audio validation
 - report
 - explore
 - creator setup
@@ -80,7 +99,7 @@ Check these first:
 
 - is the API still running on port `3001`?
 - is the phone on the same Wi-Fi?
-- is `EXPO_PUBLIC_API_BASE_URL` still pointing to the correct local IP?
+- did `dev:echo:mobile:lan` print the correct current LAN IP for the API base?
 
 ## Next Step After Local Phone Testing
 

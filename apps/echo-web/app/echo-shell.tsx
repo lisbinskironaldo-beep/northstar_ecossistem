@@ -2,12 +2,14 @@
 
 import { CSSProperties, useEffect, useMemo, useState } from 'react';
 import { DemoSetupCard } from './components/demo-setup-card';
+import { CreatorWorkspace } from './components/echo/creator-workspace';
+import { ListenerLibrary } from './components/echo/listener-library';
 import {
   ActionButton,
   Card,
   Chip,
-  Field,
   Grid,
+  LinkButton,
   MetricCard,
   Notice,
   PageShell,
@@ -15,8 +17,6 @@ import {
   Stack,
   TabButton,
   helperTextStyle,
-  inputStyle,
-  textAreaStyle,
 } from './components/ui';
 import {
   EchoCategory,
@@ -27,6 +27,25 @@ import {
   SavedTrackEntry,
   echoApi,
 } from './lib/api';
+import { ACCESS_ROOMS, AccessRoomId, getAccessRoomMeta } from './lib/access-rooms';
+import {
+  LibraryMemorySnapshot,
+  createEmptyLibraryMemory,
+  cyclePublicFolder,
+  loadLibraryMemory,
+  persistLibraryMemory,
+} from './lib/library-memory';
+import {
+  createEmptyListenerMemory,
+  loadListenerMemory,
+  persistListenerMemory,
+} from './lib/listener-memory';
+import {
+  buildListenerFeedTracks,
+  buildReserveTracks,
+  buildRoomedTracks,
+  buildSeparatedRoomTracks,
+} from './lib/feed-engine';
 
 type TabId = 'feed' | 'explore' | 'upload' | 'creators';
 type ViewerMode = 'listener' | 'creator';
@@ -119,6 +138,29 @@ export function EchoShell() {
   const [reportComposerTrackId, setReportComposerTrackId] = useState<string | null>(null);
   const [feedbackByTrack, setFeedbackByTrack] = useState<Record<string, string>>({});
   const [feedbackByCreator, setFeedbackByCreator] = useState<Record<string, string>>({});
+  const [hiddenTrackIds, setHiddenTrackIds] = useState<string[]>([]);
+  const [mutedCreatorIds, setMutedCreatorIds] = useState<string[]>([]);
+  const [hiddenTrackCatalog, setHiddenTrackCatalog] = useState<Record<string, string>>({});
+  const [mutedCreatorCatalog, setMutedCreatorCatalog] = useState<Record<string, string>>({});
+  const [hiddenCategoryIds, setHiddenCategoryIds] = useState<string[]>([]);
+  const [deprioritizedCategoryIds, setDeprioritizedCategoryIds] = useState<string[]>([]);
+  const [hiddenCategoryCatalog, setHiddenCategoryCatalog] = useState<Record<string, string>>({});
+  const [deprioritizedCategoryCatalog, setDeprioritizedCategoryCatalog] = useState<
+    Record<string, string>
+  >({});
+  const [trackSignals, setTrackSignals] = useState<Record<string, number>>({});
+  const [creatorSignals, setCreatorSignals] = useState<Record<string, number>>({});
+  const [categorySignals, setCategorySignals] = useState<Record<string, number>>({});
+  const [shortSessionTrackCounts, setShortSessionTrackCounts] = useState<Record<string, number>>({});
+  const [shortSessionCreatorCounts, setShortSessionCreatorCounts] = useState<Record<string, number>>(
+    {},
+  );
+  const [shortSessionCategoryCounts, setShortSessionCategoryCounts] = useState<
+    Record<string, number>
+  >({});
+  const [libraryMemory, setLibraryMemory] = useState<LibraryMemorySnapshot>(() =>
+    createEmptyLibraryMemory(),
+  );
 
   const [creatorId, setCreatorId] = useState(echoApi.demoCreatorId ?? '');
   const [setupEmail, setSetupEmail] = useState('');
@@ -133,8 +175,69 @@ export function EchoShell() {
   const [sourceToolOptional, setSourceToolOptional] = useState('');
   const [primaryCategoryId, setPrimaryCategoryId] = useState('');
   const [aiDeclaration, setAiDeclaration] = useState(true);
+  const [accessRoom, setAccessRoom] = useState<AccessRoomId>('standard');
+  const [enabledAccessRooms, setEnabledAccessRooms] = useState<AccessRoomId[]>(['standard']);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    const memory = loadListenerMemory();
+    const nextLibraryMemory = loadLibraryMemory();
+
+    setHiddenTrackIds(memory.hiddenTrackIds);
+    setMutedCreatorIds(memory.mutedCreatorIds);
+    setHiddenTrackCatalog(memory.hiddenTrackCatalog);
+    setMutedCreatorCatalog(memory.mutedCreatorCatalog);
+    setHiddenCategoryIds(memory.hiddenCategoryIds);
+    setDeprioritizedCategoryIds(memory.deprioritizedCategoryIds);
+    setHiddenCategoryCatalog(memory.hiddenCategoryCatalog);
+    setDeprioritizedCategoryCatalog(memory.deprioritizedCategoryCatalog);
+    setTrackSignals(memory.trackSignals);
+    setCreatorSignals(memory.creatorSignals);
+    setCategorySignals(memory.categorySignals);
+    setShortSessionTrackCounts(memory.shortSessionTrackCounts);
+    setShortSessionCreatorCounts(memory.shortSessionCreatorCounts);
+    setShortSessionCategoryCounts(memory.shortSessionCategoryCounts);
+    setLibraryMemory(nextLibraryMemory);
+  }, []);
+
+  useEffect(() => {
+    persistListenerMemory({
+        hiddenTrackIds,
+        mutedCreatorIds,
+        hiddenTrackCatalog,
+        mutedCreatorCatalog,
+        hiddenCategoryIds,
+        deprioritizedCategoryIds,
+        hiddenCategoryCatalog,
+        deprioritizedCategoryCatalog,
+        trackSignals,
+        creatorSignals,
+        categorySignals,
+        shortSessionTrackCounts,
+        shortSessionCreatorCounts,
+        shortSessionCategoryCounts,
+      });
+  }, [
+    categorySignals,
+    creatorSignals,
+    deprioritizedCategoryCatalog,
+    deprioritizedCategoryIds,
+    hiddenCategoryCatalog,
+    hiddenCategoryIds,
+    hiddenTrackCatalog,
+    hiddenTrackIds,
+    mutedCreatorCatalog,
+    mutedCreatorIds,
+    shortSessionCategoryCounts,
+    shortSessionCreatorCounts,
+    shortSessionTrackCounts,
+    trackSignals,
+  ]);
+
+  useEffect(() => {
+    persistLibraryMemory(libraryMemory);
+  }, [libraryMemory]);
 
   useEffect(() => {
     let active = true;
@@ -142,7 +245,7 @@ export function EchoShell() {
     async function loadAll() {
       try {
         const [trackData, categoryData, creatorData, savedData, followedData] = await Promise.all([
-          echoApi.getTracks(),
+          echoApi.getTracks({ limit: 60 }),
           echoApi.getCategories(),
           echoApi.getCreators(),
           echoApi.getSavedTracks().catch(() => []),
@@ -195,36 +298,265 @@ export function EchoShell() {
   }, []);
 
   const selectedTrack = useMemo(
-    () => tracks.find((track) => track.id === selectedTrackId) ?? null,
-    [selectedTrackId, tracks],
+    () =>
+      tracks.find(
+        (track) =>
+          track.id === selectedTrackId &&
+          !hiddenTrackIds.includes(track.id) &&
+          !mutedCreatorIds.includes(track.creator.id),
+      ) ?? null,
+    [hiddenTrackIds, mutedCreatorIds, selectedTrackId, tracks],
   );
   const visibleTabs = tabs.filter((tab) => tab.audience === viewerMode);
   const tabCopy = TAB_COPY[activeTab];
-  const listenerFeedTracks = useMemo(
-    () =>
-      tracks.filter(
-        (track) => track.contentState === 'published' && track.visibilityState === 'visible',
-      ),
-    [tracks],
-  );
-  const reserveTracks = useMemo(
-    () =>
-      tracks.filter(
-        (track) => track.contentState === 'published' && track.visibilityState !== 'visible',
-      ),
-    [tracks],
-  );
-  const artistsToWatch = useMemo(
-    () => creators.slice().sort((left, right) => right.followerCountCached - left.followerCountCached).slice(0, 3),
-    [creators],
+  const listenerVisibleCreators = useMemo(
+    () => creators.filter((creator) => !mutedCreatorIds.includes(creator.id)),
+    [creators, mutedCreatorIds],
   );
   const followedCreatorIds = useMemo(
     () => new Set(followedCreators.map((entry) => entry.creator.id)),
     [followedCreators],
   );
+  const savedTrackIds = useMemo(
+    () => new Set(savedTracks.map((entry) => entry.content.id)),
+    [savedTracks],
+  );
+  const listenerFeedTracks = useMemo(
+    () =>
+      buildListenerFeedTracks({
+        tracks,
+        hiddenTrackIds,
+        mutedCreatorIds,
+        hiddenCategoryIds,
+        deprioritizedCategoryIds,
+        trackSignals,
+        creatorSignals,
+        categorySignals,
+        shortSessionTrackCounts,
+        shortSessionCreatorCounts,
+        shortSessionCategoryCounts,
+        savedTracks,
+        savedTrackIds,
+        followedCreatorIds,
+        enabledAccessRooms,
+      }),
+    [
+      categorySignals,
+      creatorSignals,
+      deprioritizedCategoryIds,
+      enabledAccessRooms,
+      followedCreatorIds,
+      hiddenCategoryIds,
+      hiddenTrackIds,
+      mutedCreatorIds,
+      savedTrackIds,
+      savedTracks,
+      shortSessionCategoryCounts,
+      shortSessionCreatorCounts,
+      shortSessionTrackCounts,
+      trackSignals,
+      tracks,
+    ],
+  );
+  const roomedTracks = useMemo(
+    () =>
+      buildRoomedTracks({
+        tracks,
+        hiddenTrackIds,
+        mutedCreatorIds,
+        hiddenCategoryIds,
+        deprioritizedCategoryIds,
+        trackSignals,
+        creatorSignals,
+        categorySignals,
+        shortSessionTrackCounts,
+        shortSessionCreatorCounts,
+        shortSessionCategoryCounts,
+        savedTracks,
+        savedTrackIds,
+        followedCreatorIds,
+        enabledAccessRooms,
+      }),
+    [hiddenCategoryIds, hiddenTrackIds, mutedCreatorIds, tracks],
+  );
+  const reserveTracks = useMemo(
+    () => buildReserveTracks(roomedTracks),
+    [roomedTracks],
+  );
+  const separatedRoomTracks = useMemo(
+    () => buildSeparatedRoomTracks(roomedTracks, enabledAccessRooms),
+    [enabledAccessRooms, roomedTracks],
+  );
+  const artistsToWatch = useMemo(
+    () =>
+      listenerVisibleCreators
+        .slice()
+        .sort((left, right) => right.followerCountCached - left.followerCountCached)
+        .slice(0, 3),
+    [listenerVisibleCreators],
+  );
+  function bumpTrackSignal(trackId: string, delta: number) {
+    setTrackSignals((current) => ({
+      ...current,
+      [trackId]: Math.max(-8, Math.min(12, (current[trackId] ?? 0) + delta)),
+    }));
+  }
+
+  function bumpCreatorSignal(creatorId: string, delta: number) {
+    setCreatorSignals((current) => ({
+      ...current,
+      [creatorId]: Math.max(-10, Math.min(14, (current[creatorId] ?? 0) + delta)),
+    }));
+  }
+
+  function bumpCategorySignal(categoryId: string, delta: number) {
+    setCategorySignals((current) => ({
+      ...current,
+      [categoryId]: Math.max(-10, Math.min(14, (current[categoryId] ?? 0) + delta)),
+    }));
+  }
+
+  function applyTrackPreference(
+    track: EchoTrack,
+    signal: { track?: number; creator?: number; category?: number },
+  ) {
+    if (signal.track) {
+      bumpTrackSignal(track.id, signal.track);
+    }
+
+    if (signal.creator) {
+      bumpCreatorSignal(track.creator.id, signal.creator);
+    }
+
+    if (signal.category && track.primaryCategory?.id) {
+      bumpCategorySignal(track.primaryCategory.id, signal.category);
+    }
+  }
+
+  function softenShortSessionMemory(track: EchoTrack) {
+    setShortSessionTrackCounts((current) => {
+      const nextValue = Math.max((current[track.id] ?? 0) - 1, 0);
+      if (nextValue === 0) {
+        const next = { ...current };
+        delete next[track.id];
+        return next;
+      }
+
+      return {
+        ...current,
+        [track.id]: nextValue,
+      };
+    });
+
+    setShortSessionCreatorCounts((current) => {
+      const nextValue = Math.max((current[track.creator.id] ?? 0) - 1, 0);
+      if (nextValue === 0) {
+        const next = { ...current };
+        delete next[track.creator.id];
+        return next;
+      }
+
+      return {
+        ...current,
+        [track.creator.id]: nextValue,
+      };
+    });
+
+    if (track.primaryCategory?.id) {
+      setShortSessionCategoryCounts((current) => {
+        const nextValue = Math.max((current[track.primaryCategory?.id ?? ''] ?? 0) - 1, 0);
+        if (!track.primaryCategory?.id) {
+          return current;
+        }
+
+        if (nextValue === 0) {
+          const next = { ...current };
+          delete next[track.primaryCategory.id];
+          return next;
+        }
+
+        return {
+          ...current,
+          [track.primaryCategory.id]: nextValue,
+        };
+      });
+    }
+  }
+
+  function registerShortSession(track: EchoTrack) {
+    let nextTrackCount = 0;
+    let nextCreatorCount = 0;
+    let nextCategoryCount = 0;
+    const categoryId = track.primaryCategory?.id;
+    const categoryLabel = track.primaryCategory?.displayName;
+
+    setShortSessionTrackCounts((current) => {
+      nextTrackCount = (current[track.id] ?? 0) + 1;
+      return {
+        ...current,
+        [track.id]: nextTrackCount,
+      };
+    });
+
+    setShortSessionCreatorCounts((current) => {
+      nextCreatorCount = (current[track.creator.id] ?? 0) + 1;
+      return {
+        ...current,
+        [track.creator.id]: nextCreatorCount,
+      };
+    });
+
+    if (categoryId) {
+      setShortSessionCategoryCounts((current) => {
+        nextCategoryCount = (current[categoryId] ?? 0) + 1;
+        return {
+          ...current,
+          [categoryId]: nextCategoryCount,
+        };
+      });
+    }
+
+    applyTrackPreference(track, { track: -2, category: -1 });
+
+    if (nextTrackCount >= 2) {
+      applyTrackPreference(track, { track: -3 });
+    }
+
+    if (nextCreatorCount >= 3) {
+      bumpCreatorSignal(track.creator.id, -3);
+    }
+
+    if (categoryId && categoryLabel && nextCategoryCount >= 3) {
+      setDeprioritizedCategoryIds((current) =>
+        current.includes(categoryId) ? current : [...current, categoryId],
+      );
+      setDeprioritizedCategoryCatalog((current) => ({
+        ...current,
+        [categoryId]: categoryLabel,
+      }));
+    }
+
+    const messages = ['Sessao curta registrada'];
+
+    if (nextTrackCount >= 2) {
+      messages.push('essa faixa vai perder prioridade rapido');
+    }
+
+    if (nextCreatorCount >= 3) {
+      messages.push('o artista tambem vai esfriar');
+    }
+
+    if (categoryLabel && nextCategoryCount >= 3) {
+      messages.push(`menos da linha ${categoryLabel}`);
+    }
+
+    return messages.join(' / ');
+  }
+
   const risingCreators = useMemo(
     () =>
       creators
+        .filter((creator) => !mutedCreatorIds.includes(creator.id))
         .slice()
         .sort(
           (left, right) =>
@@ -233,25 +565,25 @@ export function EchoShell() {
             (left.followerCountCached + left.publishedContentCountCached * 3),
         )
         .slice(0, 4),
-    [creators],
+    [creators, mutedCreatorIds],
   );
   const firstBetCreators = useMemo(
     () =>
-      creators
+      listenerVisibleCreators
         .filter((creator) => !followedCreatorIds.has(creator.id))
         .slice()
         .sort((left, right) => right.publishedContentCountCached - left.publishedContentCountCached)
         .slice(0, 3),
-    [creators, followedCreatorIds],
+    [followedCreatorIds, listenerVisibleCreators],
   );
 
   const summaryStats = [
     { label: 'Faixas ativas', value: tracks.length, note: 'Catalogo visivel no feed.' },
     { label: 'Saves demo', value: savedTracks.length, note: 'Sinal de repeticao e valor percebido.' },
     {
-      label: 'Criadores',
-      value: creators.length,
-      note: 'Base atual pronta para crescer com onboarding real.',
+      label: 'Memoria fria',
+      value: Object.keys(shortSessionTrackCounts).length,
+      note: 'Faixas que ja sofreram sessao curta repetida e perderam prioridade.',
     },
     {
       label: 'Seguidos',
@@ -275,7 +607,23 @@ export function EchoShell() {
       value: followedCreators.length || Math.min(creators.length, 6),
       note: 'Sinal de quantos nomes ja podem virar habito ou curiosidade.',
     },
+    {
+      label: 'Linhas reduzidas',
+      value: deprioritizedCategoryIds.length,
+      note: 'Echo ja carrega rejeicao entre sessoes em vez de recomeçar do zero.',
+    },
   ];
+
+  useEffect(() => {
+    if (!listenerFeedTracks.length) {
+      setSelectedTrackId(null);
+      return;
+    }
+
+    if (!selectedTrackId || !listenerFeedTracks.some((track) => track.id === selectedTrackId)) {
+      setSelectedTrackId(listenerFeedTracks[0]?.id ?? null);
+    }
+  }, [listenerFeedTracks, selectedTrackId]);
 
   async function refreshSavedAndFollowed() {
     const [savedData, followedData] = await Promise.all([
@@ -290,6 +638,10 @@ export function EchoShell() {
   async function handleSave(contentId: string) {
     try {
       const result = await echoApi.saveTrack(contentId);
+      const track = tracks.find((entry) => entry.id === contentId);
+      if (track && !result.alreadySaved) {
+        applyTrackPreference(track, { track: 2, creator: 1, category: 2 });
+      }
       setFeedbackByTrack((current) => ({
         ...current,
         [contentId]: result.alreadySaved ? 'Faixa ja salva' : 'Faixa salva no preview web',
@@ -318,6 +670,18 @@ export function EchoShell() {
         replayCountInSession: 0,
         sourceContext: 'echo-web-player',
       });
+      const track = tracks.find((entry) => entry.id === contentId);
+      if (track) {
+        if (completionRatio >= 0.9) {
+          applyTrackPreference(track, { track: 3, creator: 1, category: 2 });
+          softenShortSessionMemory(track);
+        } else if (completionRatio >= 0.6) {
+          applyTrackPreference(track, { track: 1, category: 1 });
+          softenShortSessionMemory(track);
+        } else if (completionRatio <= 0.35) {
+          successMessage = registerShortSession(track);
+        }
+      }
 
       setFeedbackByTrack((current) => ({
         ...current,
@@ -336,6 +700,10 @@ export function EchoShell() {
   async function handleReport(contentId: string, reason: ReportReason) {
     try {
       const report = await echoApi.reportTrack(contentId, reason);
+      const track = tracks.find((entry) => entry.id === contentId);
+      if (track) {
+        applyTrackPreference(track, { track: -4, creator: -2, category: -1 });
+      }
       setFeedbackByTrack((current) => ({
         ...current,
         [contentId]: `Report enviado: ${report.reportReason}`,
@@ -353,6 +721,9 @@ export function EchoShell() {
   async function handleFollow(creatorIdToFollow: string) {
     try {
       const result = await echoApi.followCreator(creatorIdToFollow);
+      if (!result.alreadyFollowing) {
+        bumpCreatorSignal(creatorIdToFollow, 3);
+      }
       setFeedbackByCreator((current) => ({
         ...current,
         [creatorIdToFollow]: result.alreadyFollowing
@@ -369,6 +740,167 @@ export function EchoShell() {
             : 'Nao foi possivel seguir o creator',
       }));
     }
+  }
+
+  function handleHideTrack(track: EchoTrack) {
+    applyTrackPreference(track, { track: -5, creator: -1, category: -1 });
+    setHiddenTrackIds((current) => (current.includes(track.id) ? current : [...current, track.id]));
+    setHiddenTrackCatalog((current) => ({
+      ...current,
+      [track.id]: `${track.title} / ${track.track?.artistNameDisplay ?? track.creator.displayName}`,
+    }));
+    setFeedbackByTrack((current) => ({
+      ...current,
+      [track.id]: 'Faixa escondida do seu Echo',
+    }));
+  }
+
+  function handleDeprioritizeCategory(track: EchoTrack) {
+    const categoryId = track.primaryCategory?.id;
+    const categoryLabel = track.primaryCategory?.displayName;
+
+    if (!categoryId || !categoryLabel) {
+      setFeedbackByTrack((current) => ({
+        ...current,
+        [track.id]: 'Essa faixa ainda nao tem categoria forte para reduzir.',
+      }));
+      return;
+    }
+
+    applyTrackPreference(track, { category: -3 });
+    setDeprioritizedCategoryIds((current) =>
+      current.includes(categoryId) ? current : [...current, categoryId],
+    );
+    setDeprioritizedCategoryCatalog((current) => ({
+      ...current,
+      [categoryId]: categoryLabel,
+    }));
+    setFeedbackByTrack((current) => ({
+      ...current,
+      [track.id]: `Echo vai reduzir a linha ${categoryLabel}`,
+    }));
+  }
+
+  function handleHideCategory(track: EchoTrack) {
+    const categoryId = track.primaryCategory?.id;
+    const categoryLabel = track.primaryCategory?.displayName;
+
+    if (!categoryId || !categoryLabel) {
+      setFeedbackByTrack((current) => ({
+        ...current,
+        [track.id]: 'Essa faixa ainda nao tem estilo suficiente para ocultar.',
+      }));
+      return;
+    }
+
+    applyTrackPreference(track, { category: -5, track: -1 });
+    setHiddenCategoryIds((current) =>
+      current.includes(categoryId) ? current : [...current, categoryId],
+    );
+    setHiddenCategoryCatalog((current) => ({
+      ...current,
+      [categoryId]: categoryLabel,
+    }));
+    setFeedbackByTrack((current) => ({
+      ...current,
+      [track.id]: `Estilo ${categoryLabel} ocultado do seu Echo`,
+    }));
+  }
+
+  function handleMuteCreator(creator: EchoCreator | EchoTrack['creator']) {
+    bumpCreatorSignal(creator.id, -6);
+    setMutedCreatorIds((current) =>
+      current.includes(creator.id) ? current : [...current, creator.id],
+    );
+    setMutedCreatorCatalog((current) => ({
+      ...current,
+      [creator.id]: creator.displayName,
+    }));
+    setFeedbackByCreator((current) => ({
+      ...current,
+      [creator.id]: 'Artista silenciado do seu fluxo',
+    }));
+  }
+
+  function restoreHiddenTrack(trackId: string) {
+    setHiddenTrackIds((current) => current.filter((id) => id !== trackId));
+    setHiddenTrackCatalog((current) => {
+      const next = { ...current };
+      delete next[trackId];
+      return next;
+    });
+  }
+
+  function restoreMutedCreator(creatorIdToRestore: string) {
+    setMutedCreatorIds((current) => current.filter((id) => id !== creatorIdToRestore));
+    setMutedCreatorCatalog((current) => {
+      const next = { ...current };
+      delete next[creatorIdToRestore];
+      return next;
+    });
+  }
+
+  function restoreHiddenCategory(categoryId: string) {
+    setHiddenCategoryIds((current) => current.filter((id) => id !== categoryId));
+    setHiddenCategoryCatalog((current) => {
+      const next = { ...current };
+      delete next[categoryId];
+      return next;
+    });
+  }
+
+  function restoreDeprioritizedCategory(categoryId: string) {
+    setDeprioritizedCategoryIds((current) => current.filter((id) => id !== categoryId));
+    setDeprioritizedCategoryCatalog((current) => {
+      const next = { ...current };
+      delete next[categoryId];
+      return next;
+    });
+  }
+
+  function clearAllExclusions() {
+    setHiddenTrackIds([]);
+    setMutedCreatorIds([]);
+    setHiddenTrackCatalog({});
+    setMutedCreatorCatalog({});
+    setHiddenCategoryIds([]);
+    setDeprioritizedCategoryIds([]);
+    setHiddenCategoryCatalog({});
+    setDeprioritizedCategoryCatalog({});
+  }
+
+  function cycleTrackPublicFolder(trackId: string) {
+    setLibraryMemory((current) => ({
+      ...current,
+      publicTrackFolderById: cyclePublicFolder(trackId, current),
+    }));
+  }
+
+  function toggleTrackOffline(trackId: string) {
+    setLibraryMemory((current) => ({
+      ...current,
+      offlineTrackIds: current.offlineTrackIds.includes(trackId)
+        ? current.offlineTrackIds.filter((id) => id !== trackId)
+        : [...current.offlineTrackIds, trackId],
+    }));
+  }
+
+  function toggleTrackShared(trackId: string) {
+    setLibraryMemory((current) => ({
+      ...current,
+      sharedTrackIds: current.sharedTrackIds.includes(trackId)
+        ? current.sharedTrackIds.filter((id) => id !== trackId)
+        : [...current.sharedTrackIds, trackId],
+    }));
+  }
+
+  function toggleBorrowedCreator(creatorIdToToggle: string) {
+    setLibraryMemory((current) => ({
+      ...current,
+      borrowedCreatorIds: current.borrowedCreatorIds.includes(creatorIdToToggle)
+        ? current.borrowedCreatorIds.filter((id) => id !== creatorIdToToggle)
+        : [...current.borrowedCreatorIds, creatorIdToToggle],
+    }));
   }
 
   async function handleCreatorSetup() {
@@ -428,6 +960,7 @@ export function EchoShell() {
         description: description.trim() || undefined,
         primaryCategoryId: primaryCategoryId || undefined,
         artistNameDisplay: artistNameDisplay.trim(),
+        accessRoom,
         aiDeclaration,
         sourceToolOptional: sourceToolOptional.trim() || undefined,
       });
@@ -437,6 +970,7 @@ export function EchoShell() {
       setTitle('');
       setDescription('');
       setSourceToolOptional('');
+      setAccessRoom('standard');
       setUploadMessage(`Track created: ${track.title}`);
     } catch (submitError) {
       setUploadMessage(
@@ -445,6 +979,18 @@ export function EchoShell() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  function toggleAccessRoom(roomId: AccessRoomId) {
+    if (roomId === 'standard') {
+      return;
+    }
+
+    setEnabledAccessRooms((current) =>
+      current.includes(roomId)
+        ? current.filter((room) => room !== roomId)
+        : [...current, roomId],
+    );
   }
 
   return (
@@ -553,6 +1099,70 @@ export function EchoShell() {
           </Card>
         </Grid>
 
+        <Card
+          title="Horizonte"
+          subtitle="Echo ja esta vivo. Pulse e Lumen aparecem como proxmos passos do mesmo ecossistema."
+          accent="rgba(99, 102, 241, 0.24)"
+        >
+          <Grid min={220}>
+            <div
+              style={{
+                border: '1px solid rgba(59, 130, 246, 0.32)',
+                borderRadius: 20,
+                padding: 18,
+                background: 'rgba(7, 17, 31, 0.82)',
+              }}
+            >
+              <div style={{ display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+                <Pill label="Echo" tone="success" />
+                <Pill label="ativo" tone="accent" />
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>Music IA</div>
+              <p style={{ ...helperTextStyle, marginTop: 8 }}>
+                Descoberta, biblioteca e creator workspace comecam aqui.
+              </p>
+            </div>
+
+            <div
+              style={{
+                border: '1px solid rgba(148, 163, 184, 0.24)',
+                borderRadius: 20,
+                padding: 18,
+                background: 'rgba(7, 17, 31, 0.7)',
+                opacity: 0.84,
+              }}
+            >
+              <div style={{ display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+                <Pill label="Pulse" tone="default" />
+                <Pill label="proximo" tone="warning" />
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>Shorts IA</div>
+              <p style={{ ...helperTextStyle, marginTop: 8 }}>
+                O mesmo creator workspace vai depois abrir a camada de alcance e viralizacao.
+              </p>
+            </div>
+
+            <div
+              style={{
+                border: '1px solid rgba(148, 163, 184, 0.24)',
+                borderRadius: 20,
+                padding: 18,
+                background: 'rgba(7, 17, 31, 0.7)',
+                opacity: 0.76,
+              }}
+            >
+              <div style={{ display: 'flex', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+                <Pill label="Lumen" tone="default" />
+                <Pill label="depois" tone="default" />
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>Watch IA</div>
+              <p style={{ ...helperTextStyle, marginTop: 8 }}>
+                A mesma base podera evoluir para obras maiores quando o ecossistema estiver forte.
+              </p>
+            </div>
+          </Grid>
+        </Card>
+
         {selectedTrack ? (
           <Card
             title="Spotlight"
@@ -596,6 +1206,10 @@ export function EchoShell() {
                     label={selectedTrack.track?.aiDeclaration ? 'IA declarada' : 'Sem declaracao'}
                     tone={selectedTrack.track?.aiDeclaration ? 'success' : 'warning'}
                   />
+                  <Pill
+                    label={getAccessRoomMeta(selectedTrack.track?.accessRoom ?? 'standard').label}
+                    tone={getAccessRoomMeta(selectedTrack.track?.accessRoom ?? 'standard').tone}
+                  />
                   <Pill label={selectedTrack.contentState} tone="accent" />
                 </div>
                 <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: -1.1 }}>
@@ -611,6 +1225,14 @@ export function EchoShell() {
                   A vitrine do Echo precisa convencer rapido: faixa, artista, contexto e acoes
                   claras, tudo sem parecer dashboard.
                 </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                  <LinkButton href={`/track/${selectedTrack.id}`} label="Pagina da faixa" />
+                  <LinkButton
+                    href={`/artist/${selectedTrack.creator.id}`}
+                    label="Perfil publico"
+                    tone="secondary"
+                  />
+                </div>
               </div>
             </div>
           </Card>
@@ -741,6 +1363,60 @@ export function EchoShell() {
                   </p>
                 </Stack>
               </Card>
+
+              <Card
+                title="Exclusoes"
+                subtitle="Lugar visivel para o Echo aprender tambem com o que voce nao quer."
+                accent="rgba(239, 68, 68, 0.28)"
+              >
+                <Stack gap={10}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    <Pill label={`${hiddenTrackIds.length} faixas ocultas`} tone="warning" />
+                    <Pill label={`${mutedCreatorIds.length} artistas silenciados`} tone="danger" />
+                    <Pill label={`${hiddenCategoryIds.length} estilos ocultos`} tone="warning" />
+                    <Pill
+                      label={`${deprioritizedCategoryIds.length} menos disso`}
+                      tone="accent"
+                    />
+                  </div>
+                  {hiddenTrackIds.length === 0 &&
+                  mutedCreatorIds.length === 0 &&
+                  hiddenCategoryIds.length === 0 &&
+                  deprioritizedCategoryIds.length === 0 ? (
+                    <p style={helperTextStyle}>
+                      Quando o listener esconder algo, esse centro passa a mostrar o que saiu do
+                      fluxo e permite trazer de volta sem confusao.
+                    </p>
+                  ) : null}
+                  {Object.entries(hiddenTrackCatalog).slice(0, 2).map(([trackId, label]) => (
+                    <div key={trackId} style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+                      <div style={{ color: '#d8e5ff' }}>{label}</div>
+                      <ActionButton
+                        label="Restaurar"
+                        tone="secondary"
+                        onClick={() => restoreHiddenTrack(trackId)}
+                      />
+                    </div>
+                  ))}
+                  {Object.entries(mutedCreatorCatalog).slice(0, 2).map(([creatorId, label]) => (
+                    <div key={creatorId} style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+                      <div style={{ color: '#d8e5ff' }}>@{label}</div>
+                      <ActionButton
+                        label="Reativar"
+                        tone="secondary"
+                        onClick={() => restoreMutedCreator(creatorId)}
+                      />
+                    </div>
+                  ))}
+                  {hiddenTrackIds.length > 0 || mutedCreatorIds.length > 0 ? (
+                    <ActionButton
+                      label="Limpar exclusoes"
+                      tone="secondary"
+                      onClick={clearAllExclusions}
+                    />
+                  ) : null}
+                </Stack>
+              </Card>
             </Grid>
 
             <Grid min={360}>
@@ -789,6 +1465,13 @@ export function EchoShell() {
                         <Pill label={selectedTrack.contentState} tone="accent" />
                         <Pill label={selectedTrack.visibilityState} tone="default" />
                         <Pill
+                          label={getAccessRoomMeta(selectedTrack.track?.accessRoom ?? 'standard').label}
+                          tone={getAccessRoomMeta(selectedTrack.track?.accessRoom ?? 'standard').tone}
+                        />
+                        {selectedTrack.primaryCategory ? (
+                          <Pill label={selectedTrack.primaryCategory.displayName} tone="default" />
+                        ) : null}
+                        <Pill
                           label={selectedTrack.track?.aiDeclaration ? 'IA declarada' : 'Sem declaracao'}
                           tone={selectedTrack.track?.aiDeclaration ? 'success' : 'warning'}
                         />
@@ -801,9 +1484,13 @@ export function EchoShell() {
                         publicado por @{selectedTrack.creator.handle}
                       </div>
                       <div style={{ marginTop: 14, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                        {categories.slice(0, 3).map((category) => (
-                          <Pill key={category.id} label={category.displayName} tone="default" />
-                        ))}
+                        {selectedTrack.primaryCategory ? (
+                          <Pill label={selectedTrack.primaryCategory.displayName} tone="accent" />
+                        ) : (
+                          categories.slice(0, 1).map((category) => (
+                            <Pill key={category.id} label={category.displayName} tone="default" />
+                          ))
+                        )}
                       </div>
                     </div>
                   </div>
@@ -841,6 +1528,26 @@ export function EchoShell() {
                     <ActionButton
                       label="Salvar no player"
                       onClick={() => handleSave(selectedTrack.id)}
+                    />
+                    <ActionButton
+                      label="Menos disso"
+                      tone="secondary"
+                      onClick={() => handleDeprioritizeCategory(selectedTrack)}
+                    />
+                    <ActionButton
+                      label="Ocultar faixa"
+                      tone="secondary"
+                      onClick={() => handleHideTrack(selectedTrack)}
+                    />
+                    <ActionButton
+                      label="Ocultar estilo"
+                      tone="secondary"
+                      onClick={() => handleHideCategory(selectedTrack)}
+                    />
+                    <ActionButton
+                      label="Silenciar artista"
+                      tone="secondary"
+                      onClick={() => handleMuteCreator(selectedTrack.creator)}
                     />
                     <ActionButton
                       label="Reportar"
@@ -913,6 +1620,13 @@ export function EchoShell() {
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 6 }}>
                               <Pill label={`Faixa ${index + 1}`} tone="default" />
                               {index < 3 ? <Pill label="Top da sessao" tone="accent" /> : null}
+                              <Pill
+                                label={getAccessRoomMeta(track.track?.accessRoom ?? 'standard').label}
+                                tone={getAccessRoomMeta(track.track?.accessRoom ?? 'standard').tone}
+                              />
+                              {track.primaryCategory ? (
+                                <Pill label={track.primaryCategory.displayName} tone="default" />
+                              ) : null}
                             </div>
                             <div style={{ fontSize: 18, fontWeight: 700 }}>{track.title}</div>
                             <div style={{ marginTop: 4, color: '#d2dcf0' }}>
@@ -938,6 +1652,26 @@ export function EchoShell() {
                       />
                       <ActionButton label="Salvar" onClick={() => handleSave(track.id)} />
                       <ActionButton
+                        label="Menos disso"
+                        tone="secondary"
+                        onClick={() => handleDeprioritizeCategory(track)}
+                      />
+                      <ActionButton
+                        label="Ocultar"
+                        tone="secondary"
+                        onClick={() => handleHideTrack(track)}
+                      />
+                      <ActionButton
+                        label="Ocultar estilo"
+                        tone="secondary"
+                        onClick={() => handleHideCategory(track)}
+                      />
+                      <ActionButton
+                        label="Menos desse artista"
+                        tone="secondary"
+                        onClick={() => handleMuteCreator(track.creator)}
+                      />
+                      <ActionButton
                         label="Registrar play"
                         tone="secondary"
                         onClick={() =>
@@ -953,6 +1687,7 @@ export function EchoShell() {
                           )
                         }
                       />
+                      <LinkButton href={`/track/${track.id}`} label="Pagina da faixa" tone="secondary" />
                     </div>
                     {reportComposerTrackId === track.id ? (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 12 }}>
@@ -978,68 +1713,109 @@ export function EchoShell() {
                 ) : null}
               </Stack>
             </Card>
-            </Grid>
+          </Grid>
           </Stack>
         ) : null}
 
         {!loading && viewerMode === 'listener' && activeTab === 'explore' ? (
-          <Grid min={360}>
+          <Stack gap={18}>
             <Card
-              title="Your library"
-              subtitle="Colecao pessoal do listener demo. Esse bloco aproxima o Echo de uma experiencia musical recorrente."
+              title="Rooms"
+              subtitle="O feed principal fica limpo. As outras salas so entram quando voce abre a porta."
             >
               <Stack gap={12}>
-                {savedTracks[0] ? (
-                  <div
-                    style={{
-                      display: 'grid',
-                      gap: 16,
-                      gridTemplateColumns: '96px 1fr',
-                      padding: 16,
-                      borderRadius: 20,
-                      background: 'rgba(10, 22, 40, 0.72)',
-                      border: '1px solid rgba(59, 130, 246, 0.24)',
-                    }}
-                  >
-                    <div style={{ ...buildArtworkStyle(savedTracks[0].content.id), width: 96, minWidth: 96, borderRadius: 20 }} />
-                    <div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
-                        <Pill label="Saved now" tone="success" />
-                        <Pill label="Replay candidate" tone="accent" />
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <Pill label="Main sempre ativa" tone="success" />
+                  <Pill
+                    label={`${enabledAccessRooms.length - 1} salas abertas`}
+                    tone={enabledAccessRooms.length > 1 ? 'accent' : 'default'}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                  {ACCESS_ROOMS.map((room) => (
+                    <Chip
+                      key={room.id}
+                      selected={enabledAccessRooms.includes(room.id)}
+                      label={room.label}
+                      onClick={() => toggleAccessRoom(room.id)}
+                    />
+                  ))}
+                </div>
+                <p style={helperTextStyle}>
+                  O Main e o caminho normal. Kids, Parody, Clone-inspired, Explicit e Restricted
+                  devem ser escolha consciente, nunca ruido automatico.
+                </p>
+              </Stack>
+            </Card>
+
+            <ListenerLibrary
+              savedTracks={savedTracks}
+              followedCreators={followedCreators}
+              creators={creators}
+              libraryMemory={libraryMemory}
+              hiddenTrackCatalog={hiddenTrackCatalog}
+              mutedCreatorCatalog={mutedCreatorCatalog}
+              hiddenCategoryCatalog={hiddenCategoryCatalog}
+              deprioritizedCategoryCatalog={deprioritizedCategoryCatalog}
+              restoreHiddenTrack={restoreHiddenTrack}
+              restoreMutedCreator={restoreMutedCreator}
+              restoreHiddenCategory={restoreHiddenCategory}
+              restoreDeprioritizedCategory={restoreDeprioritizedCategory}
+              clearAllExclusions={clearAllExclusions}
+              cycleTrackPublicFolder={cycleTrackPublicFolder}
+              toggleTrackOffline={toggleTrackOffline}
+              toggleTrackShared={toggleTrackShared}
+              toggleBorrowedCreator={toggleBorrowedCreator}
+              publicUserId={echoApi.demoUserId}
+            />
+
+            <Grid min={360}>
+
+            <Card
+              title="Separated rooms"
+              subtitle="Conteudos fora do padrao vivem aqui em vez de invadir o feed principal."
+            >
+              <Stack gap={12}>
+                {ACCESS_ROOMS.filter((room) => room.id !== 'standard').map((room) => {
+                  const roomTracks = separatedRoomTracks.filter(
+                    (track) => (track.track?.accessRoom ?? 'standard') === room.id,
+                  );
+
+                  return (
+                    <div
+                      key={room.id}
+                      style={{
+                        border: '1px solid #1d3557',
+                        borderRadius: 18,
+                        padding: 16,
+                        background: 'rgba(7, 17, 31, 0.82)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
+                        <Pill label={room.label} tone={room.tone} />
+                        <Pill
+                          label={enabledAccessRooms.includes(room.id) ? 'Aberta' : 'Fechada'}
+                          tone={enabledAccessRooms.includes(room.id) ? 'accent' : 'default'}
+                        />
+                        <Pill label={`${roomTracks.length} faixas`} tone="default" />
                       </div>
-                      <div style={{ fontSize: 22, fontWeight: 800 }}>{savedTracks[0].content.title}</div>
-                      <div style={{ marginTop: 4, color: '#c6d4ee' }}>
-                        {savedTracks[0].content.track?.artistNameDisplay ?? 'Unknown artist'}
-                      </div>
-                      <div style={{ marginTop: 4, color: '#8da3ca' }}>
-                        @{savedTracks[0].content.creator.handle}
-                      </div>
+                      <p style={{ ...helperTextStyle, marginBottom: 10 }}>{room.note}</p>
+                      {roomTracks.slice(0, 3).map((track) => (
+                        <div key={track.id} style={{ marginTop: 10 }}>
+                          <div style={{ fontWeight: 700 }}>{track.title}</div>
+                          <div style={{ color: '#8da3ca' }}>
+                            {track.track?.artistNameDisplay ?? 'Unknown artist'} / @{track.creator.handle}
+                          </div>
+                        </div>
+                      ))}
+                      {roomTracks.length === 0 ? (
+                        <p style={{ ...helperTextStyle, marginTop: 8 }}>
+                          Nada ativo nesta sala ainda.
+                        </p>
+                      ) : null}
                     </div>
-                  </div>
-                ) : null}
-                {savedTracks.length === 0 ? (
-                  <p style={helperTextStyle}>No saved tracks yet for the demo user.</p>
-                ) : null}
-                {savedTracks.map((entry) => (
-                  <div
-                    key={entry.id}
-                    style={{
-                      border: '1px solid #1d3557',
-                      borderRadius: 18,
-                      padding: 16,
-                      background: 'rgba(7, 17, 31, 0.82)',
-                    }}
-                  >
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
-                      <Pill label="Salva" tone="success" />
-                    </div>
-                    <div style={{ fontWeight: 700 }}>{entry.content.title}</div>
-                    <div style={{ marginTop: 4, color: '#c6d4ee' }}>
-                      {entry.content.track?.artistNameDisplay ?? 'Unknown artist'} / @
-                      {entry.content.creator.handle}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </Stack>
             </Card>
 
@@ -1101,6 +1877,7 @@ export function EchoShell() {
               </Stack>
             </Card>
           </Grid>
+          </Stack>
         ) : null}
         {!loading && viewerMode === 'listener' && activeTab === 'creators' ? (
           <Grid min={360}>
@@ -1175,6 +1952,9 @@ export function EchoShell() {
                     </div>
                     <div style={{ fontWeight: 700 }}>{entry.creator.displayName}</div>
                     <div style={{ marginTop: 4, color: '#8da3ca' }}>@{entry.creator.handle}</div>
+                    <div style={{ marginTop: 12 }}>
+                      <LinkButton href={`/artist/${entry.creator.id}`} label="Perfil publico" tone="secondary" />
+                    </div>
                   </div>
                 ))}
               </Stack>
@@ -1209,7 +1989,10 @@ export function EchoShell() {
                       {creator.followerCountCached} seguidores
                     </div>
                     <div style={{ marginTop: 14 }}>
-                      <ActionButton label="Seguir cedo" onClick={() => handleFollow(creator.id)} />
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                        <ActionButton label="Seguir cedo" onClick={() => handleFollow(creator.id)} />
+                        <LinkButton href={`/artist/${creator.id}`} label="Perfil publico" tone="secondary" />
+                      </div>
                     </div>
                     {feedbackByCreator[creator.id] ? (
                       <p style={{ marginBottom: 0, color: '#86efac' }}>
@@ -1222,6 +2005,11 @@ export function EchoShell() {
                   Seguir no Echo precisa parecer descoberta antecipada. O usuario nao esta apenas
                   guardando um nome. Ele esta dizendo: quero voltar antes que esse creator estoure.
                 </p>
+                {echoApi.demoUserId ? (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                    <LinkButton href={`/library/${echoApi.demoUserId}`} label="Biblioteca publica" />
+                  </div>
+                ) : null}
               </Stack>
             </Card>
 
@@ -1288,181 +2076,41 @@ export function EchoShell() {
         ) : null}
 
         {!loading && viewerMode === 'creator' && activeTab === 'upload' ? (
-          <Grid min={380}>
-            <Card
-              title="Step 1: Creator setup"
-              subtitle="Entrada minima de creator com mais cara de onboarding do que formulario cru."
-            >
-              <Stack gap={14}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  <Pill label="Passo 1" tone="accent" />
-                  <Pill label="Conta + perfil" tone="success" />
-                </div>
-                <p style={helperTextStyle}>
-                  Esse e o caminho minimo ja provado na API: criar conta, gerar perfil de creator e
-                  voltar direto para o upload.
-                </p>
-                <Field label="Creator email">
-                  <input
-                    value={setupEmail}
-                    onChange={(event) => setSetupEmail(event.target.value)}
-                    style={inputStyle}
-                    placeholder="creator@example.com"
-                  />
-                </Field>
-                <Field label="Artist display name">
-                  <input
-                    value={setupDisplayName}
-                    onChange={(event) => setSetupDisplayName(event.target.value)}
-                    style={inputStyle}
-                    placeholder="Nome artistico"
-                  />
-                </Field>
-                <Field label="Handle">
-                  <input
-                    value={setupHandle}
-                    onChange={(event) => setSetupHandle(event.target.value)}
-                    style={inputStyle}
-                    placeholder="handle"
-                  />
-                </Field>
-                <Field label="Bio">
-                  <textarea
-                    value={setupBio}
-                    onChange={(event) => setSetupBio(event.target.value)}
-                    style={textAreaStyle}
-                    placeholder="Bio curta opcional"
-                  />
-                </Field>
-                <ActionButton
-                  label={creatingCreator ? 'Criando creator...' : 'Criar conta e perfil de creator'}
-                  onClick={handleCreatorSetup}
-                  disabled={creatingCreator}
-                />
-                {setupResultMessage ? (
-                  <Notice title="Resultado do creator setup" tone="success">
-                    {setupResultMessage}
-                  </Notice>
-                ) : null}
-              </Stack>
-            </Card>
-
-            <Card
-              title="Step 2: Track upload"
-              subtitle="Ingestao real de faixa conectada ao backend do Echo, agora com leitura mais guiada."
-            >
-              <Stack gap={14}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  <Pill label="Passo 2" tone="accent" />
-                  <Pill label="Faixa + metadata" tone="success" />
-                </div>
-                <Notice title="Antes de publicar" tone="info">
-                  Confirme creator, titulo, artista, categoria e declaracao de IA. Essa tela e o
-                  ponto minimo de entrada do catalogo.
-                </Notice>
-                <Field label="Choose creator">
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                    {creators.map((creator) => (
-                      <Chip
-                        key={creator.id}
-                        selected={creator.id === creatorId}
-                        label={creator.displayName}
-                        onClick={() => {
-                          setCreatorId(creator.id);
-                          if (!artistNameDisplay.trim()) {
-                            setArtistNameDisplay(creator.displayName);
-                          }
-                        }}
-                      />
-                    ))}
-                  </div>
-                </Field>
-
-                <Field label="Creator ID">
-                  <input
-                    value={creatorId}
-                    onChange={(event) => setCreatorId(event.target.value)}
-                    style={inputStyle}
-                  />
-                </Field>
-
-                <Field label="Track title">
-                  <input
-                    value={title}
-                    onChange={(event) => setTitle(event.target.value)}
-                    style={inputStyle}
-                    placeholder="Track title"
-                  />
-                </Field>
-
-                <Field label="Artist display name">
-                  <input
-                    value={artistNameDisplay}
-                    onChange={(event) => setArtistNameDisplay(event.target.value)}
-                    style={inputStyle}
-                    placeholder="Artist display name"
-                  />
-                </Field>
-
-                <Field label="Choose category">
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                    {categories.map((category) => (
-                      <Chip
-                        key={category.id}
-                        selected={category.id === primaryCategoryId}
-                        label={category.displayName}
-                        onClick={() => setPrimaryCategoryId(category.id)}
-                      />
-                    ))}
-                  </div>
-                </Field>
-                <Field label="Description">
-                  <textarea
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
-                    style={textAreaStyle}
-                    placeholder="Description"
-                  />
-                </Field>
-
-                <Field label="Source tool">
-                  <input
-                    value={sourceToolOptional}
-                    onChange={(event) => setSourceToolOptional(event.target.value)}
-                    style={inputStyle}
-                    placeholder="Optional source tool"
-                  />
-                </Field>
-
-                <label
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    fontWeight: 700,
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={aiDeclaration}
-                    onChange={(event) => setAiDeclaration(event.target.checked)}
-                  />
-                  AI declaration confirmed
-                </label>
-
-                <ActionButton
-                  label={submitting ? 'Submitting...' : 'Submit track'}
-                  onClick={handleSubmitTrack}
-                  disabled={submitting}
-                />
-                {uploadMessage ? (
-                  <Notice title="Resultado do upload" tone="success">
-                    {uploadMessage}
-                  </Notice>
-                ) : null}
-              </Stack>
-            </Card>
-          </Grid>
+          <CreatorWorkspace
+            creators={creators}
+            tracks={tracks}
+            categories={categories}
+            creatorId={creatorId}
+            setCreatorId={setCreatorId}
+            setupEmail={setupEmail}
+            setSetupEmail={setSetupEmail}
+            setupDisplayName={setupDisplayName}
+            setSetupDisplayName={setSetupDisplayName}
+            setupHandle={setupHandle}
+            setSetupHandle={setSetupHandle}
+            setupBio={setupBio}
+            setSetupBio={setSetupBio}
+            setupResultMessage={setupResultMessage}
+            creatingCreator={creatingCreator}
+            onCreateCreator={handleCreatorSetup}
+            title={title}
+            setTitle={setTitle}
+            artistNameDisplay={artistNameDisplay}
+            setArtistNameDisplay={setArtistNameDisplay}
+            description={description}
+            setDescription={setDescription}
+            sourceToolOptional={sourceToolOptional}
+            setSourceToolOptional={setSourceToolOptional}
+            primaryCategoryId={primaryCategoryId}
+            setPrimaryCategoryId={setPrimaryCategoryId}
+            aiDeclaration={aiDeclaration}
+            setAiDeclaration={setAiDeclaration}
+            accessRoom={accessRoom}
+            setAccessRoom={setAccessRoom}
+            uploadMessage={uploadMessage}
+            submitting={submitting}
+            onSubmitTrack={handleSubmitTrack}
+          />
         ) : null}
       </Stack>
     </PageShell>

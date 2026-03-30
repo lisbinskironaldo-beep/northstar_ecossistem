@@ -5,6 +5,11 @@ export interface EchoTrack {
   contentState: string;
   visibilityState: string;
   createdAt: string;
+  primaryCategory?: {
+    id: string;
+    slug: string;
+    displayName: string;
+  } | null;
   creator: {
     id: string;
     displayName: string;
@@ -13,6 +18,7 @@ export interface EchoTrack {
   track: {
     id: string;
     artistNameDisplay: string;
+    accessRoom: string;
     aiDeclaration: boolean;
     sourceToolOptional?: string | null;
   } | null;
@@ -117,6 +123,7 @@ export interface CreateTrackPayload {
   description?: string;
   primaryCategoryId?: string;
   artistNameDisplay: string;
+  accessRoom?: string;
   aiDeclaration: boolean;
   sourceToolOptional?: string;
 }
@@ -133,6 +140,12 @@ export interface CreateCreatorProfilePayload {
   handle: string;
   bio?: string;
   primaryFront?: 'echo' | 'pulse' | 'lumen';
+}
+
+export interface GetTracksOptions {
+  surface?: 'echo' | 'pulse' | 'lumen';
+  limit?: number;
+  creatorId?: string;
 }
 
 const API_BASE_URL =
@@ -159,8 +172,18 @@ export const echoApi = {
   baseUrl: API_BASE_URL,
   demoUserId: DEMO_USER_ID,
   demoCreatorId: DEMO_CREATOR_ID,
-  getTracks() {
-    return fetchJson<EchoTrack[]>('/content/tracks?surface=echo&limit=20');
+  getTracks(options: GetTracksOptions = {}) {
+    const query = new URLSearchParams();
+    query.set('surface', options.surface ?? 'echo');
+    query.set('limit', String(options.limit ?? 20));
+    if (options.creatorId) {
+      query.set('creatorId', options.creatorId);
+    }
+
+    return fetchJson<EchoTrack[]>(`/content/tracks?${query.toString()}`);
+  },
+  getTrack(trackId: string) {
+    return fetchJson<EchoTrack>(`/content/tracks/${trackId}`);
   },
   getSavedTracks(userId = DEMO_USER_ID) {
     if (!userId) {
@@ -174,6 +197,9 @@ export const echoApi = {
   },
   getCreators() {
     return fetchJson<EchoCreator[]>('/creators');
+  },
+  getCreatorProfile(creatorId: string) {
+    return fetchJson<EchoCreator>(`/creators/${creatorId}`);
   },
   getFollowedCreators(userId = DEMO_USER_ID) {
     if (!userId) {

@@ -43,6 +43,10 @@ Validate:
 - [x] upload works
 - [x] creator setup works
 - [x] category browse works
+- [x] creator workspace shows basic beta readiness feedback
+- [x] creator workspace shows week-one creator pulse metrics
+- [x] creator workspace shows accepted-versus-onboarded onboarding path
+- [x] public track sharing surface exists
 
 ### Trust
 
@@ -66,6 +70,7 @@ Validate:
 - [x] rollback rule is defined
 - [x] week-01 beta operating plan is defined
 - [x] explicit beta entry gates are defined
+- [x] creator intake checklist is defined
 
 ## Beta Operating Rhythm
 

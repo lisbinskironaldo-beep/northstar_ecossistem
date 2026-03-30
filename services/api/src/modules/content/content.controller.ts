@@ -29,6 +29,11 @@ export class ContentController {
     });
   }
 
+  @Get('tracks/:contentId')
+  getTrack(@Param('contentId') contentId: string) {
+    return this.contentService.getTrack(contentId);
+  }
+
   @Get('users/:userId/saves')
   listSavedTracks(@Param('userId') userId: string) {
     const query: ListSavedTracksInput = { userId };
